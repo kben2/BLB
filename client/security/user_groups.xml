@@ -1,0 +1,94 @@
+<odoo>
+    <data noupdate="1">
+
+      <record model="ir.module.category" id="module_category_blb">
+        <field name="name">BLB</field>
+        <field name="description">User groups for BLB modules</field>
+        <field name="sequence">1</field>
+      </record>
+     
+      <record id="blb_branch_user" model="res.groups">
+       <field name="name">Branch Officer</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+	  
+	  <record id="blb_customercare_user" model="res.groups">
+       <field name="name">Customer Care User</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+	  
+	  <record id="blb_legal_user" model="res.groups">
+       <field name="name">Legal User</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+
+      <record id="blb_registry_user" model="res.groups">
+       <field name="name">Registry User</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+      
+      <record id="blb_survey_user" model="res.groups">
+       <field name="name">Surveyor</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+
+      <record id="blb_planning_user" model="res.groups">
+       <field name="name">Planning User</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+
+      <record id="blb_processing_user" model="res.groups">
+       <field name="name">Processing Unit User</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+
+      <record id="blb_valuation_user" model="res.groups">
+       <field name="name">Valuation User</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+
+      <record id="blb_lease_user" model="res.groups">
+       <field name="name">Lease Committee User</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+
+      <record id="blb_titleprocessing_user" model="res.groups">
+       <field name="name">Title Processing User</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+
+      <record id="blb_titleissue_user" model="res.groups">
+       <field name="name">Title Issuer</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+	  
+	  <record id="blb_ceo_user" model="res.groups">
+       <field name="name">CEO</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record> 
+	  
+	  <record id="blb_viewer_user" model="res.groups">
+       <field name="name">Viewer</field>
+       <field name="category_id" ref="module_category_blb"/>
+      </record>
+
+     <record id="blb_administrator" model="res.groups">
+        <field name="name">BLB Administrator</field>
+        <field name="implied_ids" eval="[(4, ref('client.blb_branch_user')),
+			(4, ref('client.blb_customercare_user')),
+			(4, ref('client.blb_legal_user')),
+            (4, ref('client.blb_registry_user')),
+            (4, ref('client.blb_survey_user')),
+            (4, ref('client.blb_planning_user')),
+            (4, ref('client.blb_processing_user')),
+            (4, ref('client.blb_valuation_user')),
+            (4, ref('client.blb_lease_user')),
+            (4, ref('client.blb_titleprocessing_user')),
+            (4, ref('client.blb_titleissue_user')),
+			(4, ref('client.blb_ceo_user')),
+			(4, ref('client.blb_viewer_user'))]"/>
+        <field name="category_id" ref="module_category_blb"/>
+      </record>
+
+    </data>
+</odoo>
