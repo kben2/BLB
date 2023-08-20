@@ -1,0 +1,91 @@
+<odoo>
+  <data>
+        <!-- Survey Allocations - explicit list view definition -->
+    <record model="ir.ui.view" id="locate_query_list">
+      <field name="name">Locate Query List</field>
+      <field name="model">blb_client.locate_query</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="id"/>
+		  <field name="name"/>
+		  <field name="srs"/>
+		  <field name="northings"/>
+          <field name="eastings"/>
+          <!-- <field name="commission" sum="Total commission"/> -->         
+        </tree>
+      </field>
+    </record>
+    <!-- Locate Query - explicit form view definition -->
+    <record model="ir.ui.view" id="locate_query_form">
+      <field name="name">Locate Query Form</field>
+      <field name="model">blb_client.locate_query</field>
+      <field name="arch" type="xml">
+        <form string="Locate Query Form"> 
+          <!-- <header>
+            <button name="compute_lo" string="Check Point" type="object" class="btn-primary"/>
+          </header> -->
+          <sheet>
+            <group> 
+              <group>
+                <field name="name"/>
+                <field name="id"/>
+				<field name="srs"/>
+                <field name="northings"/>
+                <field name="eastings"/>
+				<field name="check_blbland"/>
+				<field name="check_wetland"/>
+              </group>
+              <group>
+<!--                 <field name="check_wetland"/>
+                <field name="check_surveyed"/>
+                <field name="check_blbland"/> -->
+              </group>
+            </group>
+           <!--  <notebook colspan="4">
+              <page string="Locate Query Map">
+                <div id="locatequery_div" style="position:relative; left:0; top:0; width:100%; height:500px;">
+                  <iframe id="locatequery_iframe" src="" marginwidth="0" marginheight="0" frameborder="no" 
+                            scrolling="yes" style="height:100%; width:100%; border-width:0px;"></iframe>
+                </div>
+              </page>
+            </notebook> -->
+          </sheet> 
+          <footer>     
+            <!-- Blank Footer to hide the Save and Discard buttons -->
+          </footer>
+        </form>
+      </field>
+    </record>
+	<!-- Select Budget Summary action -->
+    <record id="action_window_locatequery" model="ir.actions.act_window">
+        <field name="name">Locate Query Form</field>
+        <field name="res_model">blb_client.locate_query</field>
+        <field name="view_mode">tree,form</field>
+        <!-- <field name="view_id" ref="locate_query_form"/> -->
+        <!-- <field name="target">inline</field> -->
+    </record>  
+
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="client.action_server">
+      <field name="name">client server</field>
+      <field name="model_id" ref="model_client_client"/>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!-- <menuitem name="Dashboard Reports" id="reports_root" web_icon="client,static/description/report-icon.png" sequence="1"/> -->
+
+    <menuitem name="Locate Query" id="blb_client.locate_query_menu" parent="blb_client.maps_menuroot"  
+      action="action_window_locatequery" sequence="3"/>
+
+  </data>
+</odoo>

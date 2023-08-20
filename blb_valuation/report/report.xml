@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="action_groundrent_revision_print" model="ir.actions.report">
+            <field name="name">Print</field>
+            <field name="model">blb_valuation.groundrent_revision</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">blb_valuation.groundrent_revision_print</field>
+            <field name="report_file">blb_valuation.groundrent_revision_print</field>
+            <field name="print_report_name">'Print - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_blb_valuation_groundrent_revision"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="action_valuation_calculator_print" model="ir.actions.report">
+            <field name="name">Print</field>
+            <field name="model">blb_valuation.valuation_calculator</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">blb_valuation.valuation_calculator_print</field>
+            <field name="report_file">blb_valuation.valuation_calculator_print</field>
+            <field name="print_report_name">'Print - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_blb_valuation_valuation_calculator"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,389 @@
+<odoo>
+  <data>
+    <!-- BLB Counties -explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.counties_list">
+      <field name="name">Counties List</field>
+      <field name="model">blb_valuation.counties</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_valuation.counties_form">
+      <field name="name">Counties Form</field>
+      <field name="model">blb_valuation.counties</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="BLB County Form" />
+            <group>
+              <field name="name"/>
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> 
+        </form>
+      </field>
+    </record>
+
+    <!-- BLB Districts -explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.districts_list">
+      <field name="name">Districts List</field>
+      <field name="model">blb_valuation.districts</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="county_id"/>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_valuation.districts_form">
+      <field name="name">District Form</field>
+      <field name="model">blb_valuation.districts</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="District Form" />
+            <group>
+              <field name="county_id"/>
+              <field name="name"/>
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> 
+        </form>
+      </field>
+    </record>
+
+    <!-- BLB Sub-Counties -explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.subcounties_list">
+      <field name="name">Sub-Counties List</field>
+      <field name="model">blb_valuation.subcounties</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="county_id"/>
+          <field name="district_id"/>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_valuation.subcounties_form">
+      <field name="name">Sub-County Form</field>
+      <field name="model">blb_valuation.subcounties</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="Sub-County Form" />
+            <group>
+              <field name="county_id"/>
+              <field name="district_id"/>
+              <field name="name"/>
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> 
+        </form>
+      </field>
+    </record>
+
+    <!-- BLB Parishes -explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.parishes_list">
+      <field name="name">Parishes List</field>
+      <field name="model">blb_valuation.parishes</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="county_id"/>
+          <field name="district_id"/>
+          <field name="subcounty_id"/>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_valuation.parishes_form">
+      <field name="name">Parish Form</field>
+      <field name="model">blb_valuation.parishes</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="Parish Form" />
+            <group>
+              <field name="county_id"/>
+              <field name="district_id"/>
+              <field name="subcounty_id"/>
+              <field name="name"/>
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> 
+        </form>
+      </field>
+    </record>
+
+    <!-- BLB Villages -explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.villages_list">
+      <field name="name">Villages List</field>
+      <field name="model">blb_valuation.villages</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="county_id"/>
+          <field name="district_id"/>
+          <field name="subcounty_id"/>
+          <field name="parish_id"/>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_valuation.villages_form">
+      <field name="name">Village Form</field>
+      <field name="model">blb_valuation.villages</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="Village Form" />
+            <group>
+              <field name="county_id"/>
+              <field name="district_id"/>
+              <field name="subcounty_id"/>
+              <field name="parish_id"/>
+              <field name="name"/>
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> 
+        </form>
+      </field>
+    </record>
+
+    <!-- BLB Types of Land Use -explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.landuse_types_list">
+      <field name="name">Types of Land Use List</field>
+      <field name="model">blb_valuation.landuse_types</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_valuation.landuse_types_form">
+      <field name="name">Type of Land Use Form</field>
+      <field name="model">blb_valuation.landuse_types</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="Type of Land Use Form" />
+            <group>
+              <field name="name"/>
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> 
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB Land Use Valuation -explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.landuse_valuation_list">
+      <field name="name">Land Use Valuation List</field>
+      <field name="model">blb_valuation.landuse_valuation</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="landuse_type_id"/>
+          <field name="from_range" widget='monetary' options="{'currency_field': 'currency_id'}" />
+          <field name="to_range" widget='monetary' options="{'currency_field': 'currency_id'}" />
+          <field name="currency_id" invisible="1"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_valuation.landuse_valuation_form">
+      <field name="name">Land Use Valuation Form</field>
+      <field name="model">blb_valuation.landuse_valuation</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="Land Use Valuation Form" />
+            <group>
+              <field name="landuse_type_id"/>
+              <field name="from_range" widget='monetary' options="{'currency_field': 'currency_id'}" />
+              <field name="to_range" widget='monetary' options="{'currency_field': 'currency_id'}" />
+              <field name="currency_id" invisible="1"/>
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> 
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB Valuation Table - explicit list view definition -->
+    <record model="ir.ui.view" id="blb_valuation.valuation_table_list">
+      <field name="name">Valuation Table</field>
+      <field name="model">blb_valuation.valuation_table</field>
+      <field name="arch" type="xml">
+        <tree string="Valuation Table">
+          <field name="county_id"/>
+          <field name="district_id"/>
+          <field name="subcounty_id"/>
+          <field name="parish_id"/>
+          <field name="village_id"/>  
+          <field name="landuse_valuation_ids" widget='many2many_tags'/>     
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_valuation.valuation_table_form">
+      <field name="name">Valuation Table Form</field>
+      <field name="model">blb_valuation.valuation_table</field>
+      <field name="arch" type="xml">
+        <form string="Valuation Table Form">
+          <sheet>
+            <separator string="Valuation Table Form" />
+            <group>
+              <field name="county_id"/>
+              <field name="district_id"/>
+              <field name="subcounty_id"/>
+              <field name="parish_id"/>
+              <field name="village_id"/>
+            </group>
+            <notebook colspan="4">
+              <page string="Land Use Valuations">
+                <field name="landuse_valuation_ids">  
+                  <tree string="Land Use Valuations">
+                    <control>
+                      <create name="add_landusevaluation_control" string="Add Land Use Valuation"/>
+                    </control>
+                    <field name="landuse_type_id"/>
+                    <field name="from_range" widget='monetary' options="{'currency_field': 'currency_id'}" />
+                    <field name="to_range" widget='monetary' options="{'currency_field': 'currency_id'}" />
+                    <field name="currency_id" invisible="1"/>
+                  </tree>                  
+                </field>
+              </page> 
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_counties">
+      <field name="name">BLB - Counties</field>
+      <field name="res_model">blb_valuation.counties</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_districts">
+      <field name="name">BLB - Districts</field>
+      <field name="res_model">blb_valuation.districts</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_subcounties">
+      <field name="name">BLB - Sub-Counties</field>
+      <field name="res_model">blb_valuation.subcounties</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_parishes">
+      <field name="name">BLB - Parishes</field>
+      <field name="res_model">blb_valuation.parishes</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_villages">
+      <field name="name">BLB - Villages</field>
+      <field name="res_model">blb_valuation.villages</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_landuse_types">
+      <field name="name">BLB Valuation - Types of Land Use</field>
+      <field name="res_model">blb_valuation.landuse_types</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_landuse_valuation">
+      <field name="name">BLB - Land Use Valuation</field>
+      <field name="res_model">blb_valuation.landuse_valuation</field>
+      <field name="view_mode">tree,form</field>
+    </record> 
+
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_valuation_table">
+      <field name="name">BLB - Valuation Table</field>
+      <field name="res_model">blb_valuation.valuation_table</field>
+      <field name="view_mode">tree,form</field>
+    </record> 
+
+
+
+    <!-- server action to the one above -->
+    <!-- <record model="ir.actions.server" id="blb_valuation.action_server">
+      <field name="name">blb_valuation server</field>
+      <field name="model_id" ref="model_blb_valuation_blb_valuation"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record> -->
+
+    <!-- menu categories -->
+    <menuitem name="Setup" id="blb_valuation.setup_menu" parent="blb_valuation.menu_root" sequence="7"/>    
+
+    <!-- actions -->
+    <menuitem name="Valuation Table" id="blb_valuation.valuation_table_menu" parent="blb_valuation.setup_menu" 
+      action="blb_valuation.action_window_valuation_table" sequence="1"/>
+
+    <menuitem name="Types of Land Use" id="blb_valuation.landuse_types_menu" parent="blb_valuation.setup_menu" 
+      action="blb_valuation.action_window_landuse_types" sequence="2"/>
+      
+
+    <menuitem name="Counties" id="blb_valuation.counties_menu" parent="blb_valuation.setup_menu" 
+      action="blb_valuation.action_window_counties" sequence="3"/>
+
+    <menuitem name="Districts" id="blb_valuation.districts_menu" parent="blb_valuation.setup_menu" 
+      action="blb_valuation.action_window_districts" sequence="4"/>
+
+    <menuitem name="Sub-Counties" id="blb_valuation.subcounties_menu" parent="blb_valuation.setup_menu" 
+      action="blb_valuation.action_window_subcounties" sequence="5"/>
+
+    <menuitem name="Parishes" id="blb_valuation.parishes_menu" parent="blb_valuation.setup_menu" 
+      action="blb_valuation.action_window_parishes" sequence="6"/>
+
+    <menuitem name="Villages" id="blb_valuation.villages_menu" parent="blb_valuation.setup_menu" 
+      action="blb_valuation.action_window_villages" sequence="7"/>
+
+    
+              
+  </data>
+</odoo>

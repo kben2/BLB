@@ -1,0 +1,237 @@
+<odoo>
+  <data>
+    <!-- BLB Valuation - Demand Note explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.demand_notes_list">
+      <field name="name">BLB Valuation - Demand Notes List</field>
+      <field name="model">blb_valuation.demand_note</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='Pending Review'" decoration-primary="status=='Revision Required'" decoration-info="status=='Revision Done'" 
+          decoration-success="status=='Client File Updated'" decoration-muted="status=='Cancelled'">
+          <field name="file_no"/>
+          <field name="demand_note"/>
+          <field name="status" decoration-warning="status=='Pending Review'" decoration-primary="status=='Revision Required'" 
+            decoration-info="status=='Revision Done'" decoration-success="status=='Client File Updated'" decoration-muted="status=='Cancelled'"
+            widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Valuation - Demand Note - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_valuation.demand_note_form">
+      <field name="name">BLB Valuation - Demand Note Form</field>
+      <field name="model">blb_valuation.demand_note</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_to_revision_required" string="Revision Required" type="object" status="review" class="btn-primary"/>
+            <button name="action_to_cancel" string="Revision NOT Required" type="object" status="review" class="btn-secondary"/>
+
+            <button name="action_to_revised" string="Revised" type="object" status="revision_required" class="btn-primary"/>
+            <button name="action_to_update_done" string="Client File Updated" type="object" status="revised" class="btn-primary"/>
+
+            <field name="status" widget="statusbar" statusbar_visible="review,revision_required,revised,update_done,cancel"/>
+          </header>
+          <sheet>
+            <separator string="BLB Valuation - Demand Note Form" />
+            <group>
+              <field name="file_no"/>
+              <field name="demand_note" filename="demand_note_name" />  
+              <field name="demand_note_name" invisible="1"/>
+              <field name="currency_id" invisible="1"/>
+              <field name="revised_ground_rent" attrs="{'invisible':['|',('status','=','review'),('status','=','cancel')], 
+                'required': [('status','=','revision_required')], 'readonly': ['|', ('status','=','revised'), ('status','=','update_done')]}" />
+              <field name="date_effective" attrs="{'invisible':['|',('status','=','review'),('status','=','cancel')], 
+                'required': [('status','=','revision_required')], 'readonly': ['|', ('status','=','revised'), ('status','=','update_done')]}"/>
+              <field name="remarks" attrs="{'invisible':['|',('status','=','review'),('status','=','cancel')], 
+                'readonly': ['|', ('status','=','revised'), ('status','=','update_done')]}"/>
+              <field name="revised_by" attrs="{'invisible':['|',('status','=','review'),('status','=','cancel')], 
+                'readonly': ['|', ('status','=','revised'), ('status','=','update_done')]}" />
+            </group>        
+          </sheet>
+          <!-- <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> -->
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB Valuation - Valuation Assessment explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.valuation_assessments_list">
+      <field name="name">BLB Valuation - Valuation Assessments List</field>
+      <field name="model">blb_valuation.valuation_assessment</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='Pending Valuation'" decoration-primary="status=='Make Assessment'" decoration-info="status=='Compiled Assessment'" 
+          decoration-success="status=='Client File Updated'" decoration-muted="status=='Cancelled'">
+          <field name="file_no"/>
+          <field name="print_item"/>
+          <field name="status" decoration-warning="status=='Pending Valuation'" decoration-primary="status=='Make Assessment'" 
+            decoration-info="status=='Compiled Assessment'" decoration-success="status=='Client File Updated'" decoration-muted="status=='Cancelled'"
+            widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Valuation - Valuation Assessment - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_valuation.valuation_assessment_form">
+      <field name="name">BLB Valuation - Valuation Assessment Form</field>
+      <field name="model">blb_valuation.valuation_assessment</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_to_make_assessment" string="Make Assessment" type="object" status="pending" class="btn-primary"/>
+            <button name="action_to_cancel" string="Nothing Requires Changing" type="object" status="pending" class="btn-secondary"/>
+
+            <button name="action_to_assessment_compiled" string="Assessment Compiled" type="object" status="make_assessment" class="btn-primary"/>
+            <button name="action_to_update_done" string="Client File Updated" type="object" status="assessment_compiled" class="btn-primary"/>
+
+            <field name="status" widget="statusbar" statusbar_visible="pending,make_assessment,assessment_compiled,update_done,cancel"/>
+          </header>
+          <sheet>
+            <separator string="BLB Valuation - Valuation Assessment Form" />
+            <group>
+              <field name="file_no"/>
+              <field name="print_item" filename="print_item_name"/>  
+              <field name="print_item_name" invisible="1"/>              
+
+              <field name="receipt" filename="receipt_name" attrs="{'invisible':['|',('status','=','pending'),('status','=','cancel')], 
+                'required': [('status','=','make_assessment')], 'readonly': ['|',('status','=','assessment_compiled'),('status','=','update_done')]}"/>
+              <field name="receipt_name" invisible="1"/>
+              <field name="lease_committee_form" filename="lease_committee_form_name" attrs="{'invisible':['|',('status','=','pending'),('status','=','cancel')], 
+                'required': [('status','=','make_assessment')], 'readonly': ['|',('status','=','assessment_compiled'),('status','=','update_done')]}"/>
+              <field name="lease_committee_form_name" invisible="1"/>
+
+              <field name="revision_details" attrs="{'invisible':['|',('status','=','pending'),('status','=','cancel')], 
+                'required': [('status','=','make_assessment')], 'readonly': ['|',('status','=','assessment_compiled'),('status','=','update_done')]}"/>
+              <field name="assessed_by" attrs="{'invisible':['|',('status','=','pending'),('status','=','cancel')], 
+                'required': [('status','=','make_assessment')], 'readonly': ['|',('status','=','assessment_compiled'),('status','=','update_done')]}" />              
+            </group>        
+          </sheet>
+          <!-- <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> -->
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB Valuation - Valuation Requests explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.valuation_requestss_list">
+      <field name="name">BLB Valuation - Valuation Requestss List</field>
+      <field name="model">blb_valuation.valuation_requests</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='Pending Valuation'" decoration-info="status=='Assessment Compiled'" decoration-primary="status=='Field Inspection'"  
+          decoration-success="status=='Valuation Done'">
+          <field name="file_no"/>
+          <field name="request_item"/>
+          <field name="status" decoration-warning="status=='Pending Valuation'" decoration-info="status=='Assessment Compiled'" 
+            decoration-primary="status=='Field Inspection'" decoration-success="status=='Valuation Done'" widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Valuation - Valuation Requests - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_valuation.valuation_requests_form">
+      <field name="name">BLB Valuation - Valuation Requests Form</field>
+      <field name="model">blb_valuation.valuation_requests</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_to_assessment_compiled" string="Assessment Compiled" type="object" status="pending" class="btn-primary"/>
+            <button name="action_to_field_inspection" string="Requires Field Inspection" type="object" status="assessment_compiled" class="btn-primary"/>
+            <button name="action_to_valuation_done" string="Valuation Done" type="object" status="assessment_compiled,field_inspection" class="btn-primary"/>
+
+            <field name="status" widget="statusbar" statusbar_visible="pending,assessment_compiled,field_inspection,valuation_done"/>
+          </header>
+          <sheet>
+            <separator string="BLB Valuation - Valuation Requests Form" />
+            <group>
+              <field name="file_no"/>
+              <field name="request_item_name" filename="request_item_name"/>  
+              <field name="request_item_name" invisible="1"/>              
+
+              <field name="assessment" filename="assessment_name" attrs="{'invisible':['|',('status','=','pending')], 
+                'required': [('status','=','assessment_compiled')], 'readonly': ['|', ('status','=','field_inspection'), ('status','=','valuation_done')]}"/>
+              <field name="assessment_name" invisible="1"/>
+              <field name="other_details" attrs="{'invisible':['|',('status','=','pending')], 
+                'required': [('status','=','assessment_compiled')], 'readonly': ['|', ('status','=','field_inspection'), ('status','=','valuation_done')]}"/>
+              <field name="assessed_by" attrs="{'invisible':['|',('status','=','pending')], 
+                'readonly': ['|', ('status','=','field_inspection'), ('status','=','valuation_done')]}" />   
+
+              <field name="requires_field_inspection" invisible="1"/> 
+
+              <field name="valuation_report" filename="valuation_report_name" attrs="{'invisible':['|',('status','=','pending')], 
+                'required': [('status','=','valuation_done')]}" />
+              <field name="valuation_report_name" invisible="1"/>           
+            </group>        
+          </sheet>
+          <!-- <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> -->
+        </form>
+      </field>
+    </record>
+
+
+
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_demand_notes">
+      <field name="name">BLB Valuation - Demand Notes</field>
+      <field name="res_model">blb_valuation.demand_note</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_valuation_assessments">
+      <field name="name">BLB Valuation - Valuation Assessments</field>
+      <field name="res_model">blb_valuation.valuation_assessment</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_valuation_requests">
+      <field name="name">BLB Valuation - Valuation Requests</field>
+      <field name="res_model">blb_valuation.valuation_requests</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- server action to the one above -->
+    <!-- <record model="ir.actions.server" id="blb_valuation.action_server">
+      <field name="name">blb_valuation server</field>
+      <field name="model_id" ref="model_blb_valuation_blb_valuation"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record> -->
+
+    <!-- Top menu item -->
+    <menuitem name="Valuation Unit" id="blb_valuation.menu_root" web_icon="blb_valuation,static/description/icon.png" sequence="11" 
+      groups="blb_base.blb_valuation"/>
+
+    <!-- menu categories -->
+    <menuitem name="Demand Notes" id="blb_valuation.demand_notes_menu" parent="blb_valuation.menu_root" sequence="1"/>
+    <menuitem name="Valuation Assessments" id="blb_valuation.valuation_assessments_menu" parent="blb_valuation.menu_root" sequence="2"/>
+    <menuitem name="Valuation Requests" id="blb_valuation.valuation_requests_menu" parent="blb_valuation.menu_root" sequence="3"/>
+
+    <!-- actions -->
+    <menuitem name="All Demand Notes" id="blb_valuation.demand_notes_list_menu" parent="blb_valuation.demand_notes_menu" 
+      action="blb_valuation.action_window_demand_notes" sequence="1"/>
+
+    <menuitem name="All Assessments" id="blb_valuation.valuation_assessments_list_menu" parent="blb_valuation.valuation_assessments_menu" 
+      action="blb_valuation.action_window_valuation_assessments" sequence="1"/>
+
+    <menuitem name="All Requests" id="blb_valuation.valuation_requests_list_menu" parent="blb_valuation.valuation_requests_menu" 
+      action="blb_valuation.action_window_valuation_requests" sequence="1"/>
+              
+  </data>
+</odoo>

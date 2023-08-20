@@ -1,0 +1,218 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="blb_base.list">
+      <field name="name">blb_base list</field>
+      <field name="model">blb_base.blb_base</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Extended Res.Users Form --> 
+    <record id="view_users_form_extended" model="ir.ui.view">
+        <field name="name">res.users.form.blb_extended</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml"> 
+            <xpath expr="//field[@name='login']" position="after"> 
+              <label for="blb_branch" class="oe_edit_only" string="BLB Branch"/>
+              <h2><field name="blb_branch" widget="selection"/></h2> 
+
+              <label for="blb_department" class="oe_edit_only" string="BLB Department"/>
+              <h2><field name="blb_department" widget='many2many_tags' options="{'no_create_edit': True}"/></h2> 
+
+              <label for="blb_unit" class="oe_edit_only" string="BLB Unit"/>
+              <h2><field name="blb_unit" widget='many2many_tags' options="{'no_create_edit': True}"/></h2>
+              <!-- <field name="department_selected" invisible="1"/> attrs="{'required':[('department_selected','==',True)]}"  -->
+            </xpath>        
+        </field>
+    </record>
+    <!-- Extended Res.Users Tree --> 
+    <record id="view_users_tree_extended" model="ir.ui.view">
+        <field name="name">res.users.tree.blb_extended</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_tree"/>
+        <field name="arch" type="xml"> 
+            <xpath expr="//field[@name='login']" position="after"> 
+              <field name="blb_branch"/>
+              <field name="blb_department"/>
+              <field name="blb_unit"/>
+            </xpath>         
+        </field>
+    </record>
+
+
+    <!-- Branches - explicit list view definition -->
+    <record model="ir.ui.view" id="blb_base.branches_list">
+      <field name="name">Branches</field>
+      <field name="model">blb_base.branches</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+    <!-- Branches - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_base.branches_form">
+      <field name="name">Branches Form</field>
+      <field name="model">blb_base.branches</field>
+      <field name="arch" type="xml">
+        <form string="Branches Form">
+          <sheet>
+            <separator string="Branch Form" />
+            <div class="oe_button_box" name="button_box">
+              <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-check">
+                <field name="active" widget="boolean_button" options='{"terminology": "active"}'/>
+              </button>
+            </div>
+            <group>              
+              <field name="name"/>
+            </group>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <!-- BLB Department - explicit list view definition -->
+    <record model="ir.ui.view" id="blb_base.blb_department_list">
+      <field name="name">BLB Department</field>
+      <field name="model">blb_base.blb_department</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+    <!-- BLB Department - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_base.blb_department_form">
+      <field name="name">BLB Department Form</field>
+      <field name="model">blb_base.blb_department</field>
+      <field name="arch" type="xml">
+        <form string="Departments Form">
+          <sheet>
+            <separator string="Department Form" />
+            <div class="oe_button_box" name="button_box">
+              <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-check">
+                <field name="active" widget="boolean_button" options='{"terminology": "active"}'/>
+              </button>
+            </div>
+            <group>              
+              <field name="name"/>
+            </group>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <!-- BLB Unit - explicit list view definition -->
+    <record model="ir.ui.view" id="blb_base.blb_unit_list">
+      <field name="name">BLB Unit</field>
+      <field name="model">blb_base.blb_unit</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="department_id"/>
+        </tree>
+      </field>
+    </record>
+    <!-- BLB Unit - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_base.blb_unit_form">
+      <field name="name">BLB Unit Form</field>
+      <field name="model">blb_base.blb_unit</field>
+      <field name="arch" type="xml">
+        <form string="Units Form">
+          <sheet>
+            <separator string="Units Form" />
+            <div class="oe_button_box" name="button_box">
+              <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-check">
+                <field name="active" widget="boolean_button" options='{"terminology": "active"}'/>
+              </button>
+            </div>
+            <group>              
+              <field name="name"/>
+              <field name="department_id"/>
+            </group>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+
+    
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_base.action_window">
+      <field name="name">blb_base window</field>
+      <field name="res_model">blb_base.blb_base</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_base.action_window_branches">
+      <field name="name">Branches</field>
+      <field name="res_model">blb_base.branches</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_base.action_window_blb_department">
+      <field name="name">BLB Departments</field>
+      <field name="res_model">blb_base.blb_department</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_base.action_window_blb_unit">
+      <field name="name">BLB Units</field>
+      <field name="res_model">blb_base.blb_unit</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="blb_base.action_server">
+      <field name="name">blb_base server</field>
+      <field name="model_id" ref="model_blb_base_blb_base"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+    <menuitem name="Base Info" id="blb_base.menu_root" web_icon="blb_base,static/description/icon.png" sequence="2" groups="blb_base.blb_administrator"/>
+
+    <!-- menu categories -->
+    <menuitem name="Branches" id="blb_base.menu_1" parent="blb_base.menu_root" sequence="1"/>
+    <menuitem name="Departments/Units" id="blb_base.menu_2" parent="blb_base.menu_root" sequence="2"/>
+
+    <!-- actions -->
+    <menuitem name="Branches" id="blb_base.menu_branches" parent="blb_base.menu_1" action="blb_base.action_window_branches" sequence="1"/>
+
+    <menuitem name="Departments" id="blb_base.menu_departments" parent="blb_base.menu_2" action="blb_base.action_window_blb_department" sequence="1"/>
+    <menuitem name="Units" id="blb_base.menu_units" parent="blb_base.menu_2" action="blb_base.action_window_blb_unit" sequence="2"/>
+              
+  </data>
+</odoo>

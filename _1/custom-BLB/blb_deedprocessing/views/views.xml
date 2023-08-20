@@ -1,0 +1,282 @@
+<odoo>
+  <data>
+    <!-- BLB - Survey Fees - Demand Note explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_deedprocessing.survey_fees_list">
+      <field name="name">BLB - Survey Fees List</field>
+      <field name="model">blb_deedprocessing.survey_fees</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="amount"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB - Survey Fees - Demand Note - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_deedprocessing.survey_fees_form">
+      <field name="name">BLB - Survey Fees Form</field>
+      <field name="model">blb_deedprocessing.survey_fees</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="BLB - Survey Fees Form" />
+            <group>
+              <field name="name"/>
+              <field name="amount"/>  
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB - Deed Processing - explicit list view definition -->
+    <record model="ir.ui.view" id="blb_deedprocessing.blb_deedprocessing_list">
+      <field name="name">BLB - Deed Processing List</field>
+      <field name="model">blb_deedprocessing.blb_deedprocessing</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='incoming_file'" decoration-primary="status=='processing_officer' or status=='pending_survey' or 
+            status=='pending_planning'" decoration-info="status=='survey_done' or status=='planning_done'" decoration-success="status=='team_lead_processing'" decoration-danger="status=='problematic_file'" decoration-muted="status=='closed'">
+          <field name="date_request"/>
+          <field name="name"/>
+          <field name="blb_branch"/>
+          <field name="premium_amount"/>
+          <field name="survey_amount"/>
+          <field name="urgency_level"/>
+          <field name="status" decoration-warning="status=='incoming_file'" decoration-primary="status=='processing_officer' or status=='pending_survey' or 
+            status=='pending_planning'" decoration-info="status=='survey_done' or status=='planning_done'" decoration-success="status=='team_lead_processing'" decoration-danger="status=='problematic_file'" decoration-muted="status=='closed'" widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+
+    <!-- BLB - Deed Processing - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_deedprocessing.blb_deedprocessing_form">
+      <field name="name">BLB - Deed Processing Form</field>
+      <field name="model">blb_deedprocessing.blb_deedprocessing</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_to_processingofficer" string="Forward to Processing Officer" type="object" status="incoming_file"  
+              attrs="{'invisible':[('status','!=','incoming_file'),('status','!=','survey_done'),('status','!=','planning_done')]}" class="btn-primary" 
+              groups="blb_base.blb_processing_lead"/>
+            
+            <button name="action_to_survey" string="Forward to Survey" type="object" status="incoming_file"  class="btn-primary"
+                attrs="{'invisible':[('status','!=','incoming_file')]}" groups="blb_base.blb_processing_lead"/>
+            <button name="action_to_planning" string="Forward to Planning" type="object" status="incoming_file" class="btn-primary"
+              attrs="{'invisible':[('status','!=','incoming_file')]}" groups="blb_base.blb_processing_lead"/>
+            <button name="action_survey_done" string="Survey Done" type="object" status="pending_survey" class="btn-primary"
+              attrs="{'invisible':[('status','!=','pending_survey')]}" groups="blb_base.blb_survey_surveyor"/>              
+            <button name="action_planning_done" string="Planning Done" type="object" status="pending_planning" class="btn-primary"
+              attrs="{'invisible':[('status','!=','pending_planning')]}" groups="blb_base.blb_planning_officer"/>
+            <button name="action_mark_problematicfile" string="Mark as Problematic File" type="object" status="processing_officer" class="btn-primary"
+              attrs="{'invisible':[('status','!=','processing_officer')]}" groups="blb_base.blb_processing_user,blb_base.blb_processing_lead"/>
+
+            <button name="action_to_team_leadprocessing" string="Forward to Team Lead Processing" type="object" 
+                status="processing_officer" class="btn-primary" attrs="{'invisible':[('status','!=','processing_officer')]}" 
+                groups="blb_base.blb_processing_user,blb_base.blb_processing_lead" />
+            <button name="action_closed" string="Close Request" type="object" status="team_lead_processing" class="btn-primary" 
+              attrs="{'invisible':[('status','!=','team_lead_processing')]}" groups="blb_base.blb_processing_lead"/>
+
+            <field name="status" widget="statusbar" 
+              statusbar_visible="incoming_file,processing_officer,pending_survey,pending_planning,team_lead_processing,problematic_file,closed"/>
+          </header>
+          <sheet>
+            <separator string="BLB - Deed Processing Form" />
+            <group string="Request Details">
+              <field name="date_request" attrs="{'readonly': [('status','!=','incoming_file')]}"/>
+              <field name="client_file_no" attrs="{'readonly': [('status','!=','incoming_file')]}"/>
+              <field name="blb_branch" attrs="{'readonly': [('status','!=','incoming_file')]}"/>
+              <field name="person_responsible" attrs="{'readonly': [('status','!=','incoming_file')]}"/>
+              <field name="remarks_person_responsible" attrs="{'readonly': [('status','!=','incoming_file')]}"/>
+              <field name="urgency_level" attrs="{'readonly': [('status','!=','incoming_file')]}"/>
+            </group>
+            <group string="Survey Details">
+              <field name="type_survey" attrs="{'readonly': [('status','!=','incoming_file'),('status','!=','survey_done')]}"/>
+              <field name="survey_amount" 
+                attrs="{'invisible': [('type_survey','=',False)], 'readonly': [('status','!=','incoming_file'),('status','!=','survey_done')]}"/>
+              <field name="the_surveyor" 
+                attrs="{'invisible': [('type_survey','=',False)], 'readonly': [('status','!=','incoming_file'),('status','!=','survey_done')]}"/>
+              
+              <field name="premium_amount" attrs="{'readonly': [('status','!=','incoming_file'),('status','!=','survey_done'),('status','!=','planning_done')]}"/>
+              <field name="jrj_location" attrs="{'readonly': [('status','!=','incoming_file'),('status','!=','survey_done'),('status','!=','planning_done')]}"/>
+            </group>
+            <group string="Processing Officer" attrs="{'invisible':['|',('status','=','pending_survey'),('status','=','pending_planning')]}">
+              <field name="the_processing_officer" 
+                attrs="{'readonly': [('status','!=','incoming_file'),('status','!=','survey_done'),('status','!=','planning_done')], 
+                'invisible':['|',('status','=','pending_survey'),('status','=','pending_planning')]}"/>
+              <field name="action_plan" 
+                attrs="{'readonly': [('status','!=','incoming_file'),('status','!=','survey_done'),('status','!=','planning_done')], 
+                'invisible':['|',('status','=','pending_survey'),('status','=','pending_planning')]}"/>
+              <field name="amount_paid_po" 
+                attrs="{'readonly': [('status','!=','incoming_file'),('status','!=','survey_done'),('status','!=','planning_done')], 
+                'invisible':['|',('status','=','pending_survey'),('status','=','pending_planning')]}"/>
+              <field name="date_allocated" 
+                attrs="{'invisible':['|',('status','=','pending_survey'),('status','=','pending_planning')]}"/>
+            </group>
+            <group string="Feedback" attrs="{'invisible': [('status','=','incoming_file')]}">
+              <field name="survey_comments" attrs="{'required': [('status','=','pending_survey')], 'readonly': [('status','!=','pending_survey')],
+                'invisible': [('status','!=','pending_survey'),('status','!=','survey_done')]}"/>
+              <field name="planning_comments" attrs="{'required': [('status','=','pending_planning')], 'readonly': [('status','!=','pending_planning')],
+                'invisible': [('status','!=','pending_planning'),('status','!=','planning_done')]}"/>
+
+              <field name="plot_number" attrs="{'readonly': [('status','!=','processing_officer')], 
+                'invisible': [('status','!=','processing_officer'),('status','!=','team_lead_processing'),('status','!=','closed')]}"/>
+              <field name="block_number" attrs="{'readonly': [('status','!=','processing_officer')], 
+                'invisible': [('status','!=','processing_officer'),('status','!=','team_lead_processing'),('status','!=','closed')]}"/>
+              <field name="area" attrs="{'readonly': [('status','!=','processing_officer')], 
+                'invisible': [('status','!=','processing_officer'),('status','!=','team_lead_processing'),('status','!=','closed')]}"/>
+              <field name="processing_comments" attrs="{'readonly': [('status','!=','processing_officer')], 
+                'invisible': [('status','!=','processing_officer'),('status','!=','team_lead_processing'),('status','!=','closed'),
+                ('status','!=','problematic_file')]}"/>   
+
+              <field name="date_closed" attrs="{'invisible':[('status','!=','team_lead_processing'),('status','!=','closed')]}" />
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models TLP  -->
+    <record model="ir.actions.act_window" id="blb_deedprocessing.action_window_blb_deedprocessing">
+      <field name="name">BLB - Deed Processing</field>
+      <field name="res_model">blb_deedprocessing.blb_deedprocessing</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_deedprocessing.action_window_blb_deedprocessing_teamleadprocessing">
+      <field name="name">Team Lead Processing</field>
+      <field name="res_model">blb_deedprocessing.blb_deedprocessing</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('status','=','team_lead_processing')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_deedprocessing.action_window_blb_deedprocessing_problematicfiles">
+      <field name="name">Problematic Files</field>
+      <field name="res_model">blb_deedprocessing.blb_deedprocessing</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('status','=','problematic_file')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_deedprocessing.action_window_blb_deedprocessing_processingofficers">
+      <field name="name">Files - Processing Officers</field>
+      <field name="res_model">blb_deedprocessing.blb_deedprocessing</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('status','=','processing_officer')]</field>
+    </record>
+
+    <!-- actions opening views on models - PO -->
+    <record model="ir.actions.act_window" id="blb_deedprocessing.action_window_blb_deedprocessing_allocated_poall">
+      <field name="name">Allocated to Me - All</field>
+      <field name="res_model">blb_deedprocessing.blb_deedprocessing</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('the_processing_officer','=', uid),('status','!=','incoming_file')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_deedprocessing.action_window_blb_deedprocessing_allocated_poprocessing">
+      <field name="name">Allocated to Me - For Processing</field>
+      <field name="res_model">blb_deedprocessing.blb_deedprocessing</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('the_processing_officer','=', uid),('status','=','processing_officer')]</field>
+    </record>
+
+    <!-- actions opening views on models - Survey -->
+    <record model="ir.actions.act_window" id="blb_deedprocessing.action_window_blb_deedprocessing_allocated_survey">
+      <field name="name">Allocated to Survey</field>
+      <field name="res_model">blb_deedprocessing.blb_deedprocessing</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('status','=','pending_survey')]</field>
+    </record>
+
+    <!-- actions opening views on models - Planning -->
+    <record model="ir.actions.act_window" id="blb_deedprocessing.action_window_blb_deedprocessing_allocated_planning">
+      <field name="name">Allocated to Planning</field>
+      <field name="res_model">blb_deedprocessing.blb_deedprocessing</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('status','=','pending_planning')]</field>
+    </record>
+
+
+
+    <!-- actions opening views on models BLB - Survey Fees  -->
+    <record model="ir.actions.act_window" id="blb_deedprocessing.action_window_survey_fees">
+      <field name="name">BLB - Survey Fees</field>
+      <field name="res_model">blb_deedprocessing.survey_fees</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- server action to the one above -->
+    <!-- <record model="ir.actions.server" id="blb_deedprocessing.action_server">
+      <field name="name">blb_deedprocessing server</field>
+      <field name="model_id" ref="model_blb_deedprocessing_blb_deedprocessing"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record> -->
+
+
+    <!-- Top menu item -->
+    <menuitem name="Deed Processing" id="blb_deedprocessing.menu_root" web_icon="blb_deedprocessing,static/description/icon.png" sequence="10" 
+        groups="blb_base.blb_processing_user,blb_base.blb_processing_lead,blb_base.blb_administrator"/>
+
+
+    <!-- menu categories -->
+    <menuitem name="Deed Processing" id="blb_deedprocessing.menu_1" parent="blb_deedprocessing.menu_root" sequence="1" 
+        groups="blb_base.blb_processing_lead,blb_base.blb_administrator"/>
+    <menuitem name="Allocated to Processing Officer" id="blb_deedprocessing.menu_2" parent="blb_deedprocessing.menu_root" sequence="2" 
+        groups="blb_base.blb_processing_user"/>
+
+    <menuitem name="Deed Processing Requests" id="blb_deedprocessing.requests_survey" parent="blb_survey.menu_root" sequence="3"
+      groups="blb_base.blb_survey"/>
+
+    <menuitem name="Deed Processing Requests" id="blb_deedprocessing.requests_planning" parent="blb_physicalplanning.menu_root" sequence="3"
+      groups="blb_base.blb_planning"/>
+
+
+    <!-- actions -->
+    <menuitem name="Team Lead Processing" id="blb_deedprocessing.deedprocessing_tlp_list" parent="blb_deedprocessing.menu_1" sequence="1"
+        action="blb_deedprocessing.action_window_blb_deedprocessing_teamleadprocessing" groups="blb_base.blb_processing_lead,blb_base.blb_administrator"/>
+    <menuitem name="Requests with Processing Officers" id="blb_deedprocessing.deedprocessing_pos_list" parent="blb_deedprocessing.menu_1" sequence="2"
+        action="blb_deedprocessing.action_window_blb_deedprocessing_processingofficers" groups="blb_base.blb_processing_lead,blb_base.blb_administrator"/>
+    <menuitem name="Problematic Files" id="blb_deedprocessing.deedprocessing_probfiles_list" parent="blb_deedprocessing.menu_1" sequence="3"
+        action="blb_deedprocessing.action_window_blb_deedprocessing_problematicfiles" groups="blb_base.blb_processing_lead,blb_base.blb_administrator"/>
+    <menuitem name="All Requests" id="blb_deedprocessing.deedprocessing_list" parent="blb_deedprocessing.menu_1" sequence="4"
+        action="blb_deedprocessing.action_window_blb_deedprocessing" groups="blb_base.blb_processing_lead,blb_base.blb_administrator"/>
+
+    <menuitem name="Pending Processing" id="blb_deedprocessing.deedprocessing_pendingprocess_list" parent="blb_deedprocessing.menu_2" sequence="1"
+        action="blb_deedprocessing.action_window_blb_deedprocessing_allocated_poprocessing" groups="blb_base.blb_processing_user"/>
+    <menuitem name="Allocated to Me - All" id="blb_deedprocessing.deedprocessing_allocatedpo_list" parent="blb_deedprocessing.menu_2" sequence="2"
+        action="blb_deedprocessing.action_window_blb_deedprocessing_allocated_poall" groups="blb_base.blb_processing_user"/>
+
+
+
+    <menuitem name="Survey Requests" id="blb_deedprocessing.deedprocessing_requests_survey_list" 
+      parent="blb_deedprocessing.requests_survey" action="blb_deedprocessing.action_window_blb_deedprocessing_allocated_survey" sequence="1"/>
+
+    <menuitem name="Planning Requests" id="blb_deedprocessing.deedprocessing_requests_planning_list" 
+      parent="blb_deedprocessing.requests_planning" action="blb_deedprocessing.action_window_blb_deedprocessing_allocated_planning" sequence="1"/>
+
+
+
+
+    <!-- actions -->
+    <menuitem name="Survey Fees" id="blb_deedprocessing.survey_fees_menu" parent="blb_survey.client_files" sequence="3"
+        action="blb_deedprocessing.action_window_survey_fees" groups="blb_base.blb_survey,blb_base.blb_administrator"/>
+
+
+  </data>
+</odoo>

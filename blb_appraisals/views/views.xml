@@ -1,0 +1,602 @@
+<odoo>
+  <data>
+    <!-- BLB Type of Appraisal - explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_appraisals.type_appraisal_list">
+      <field name="name">BLB - Type of Appraisal List</field>
+      <field name="model">blb_appraisals.type_appraisal</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB - Type of Appraisal explicit form view definition -->
+    <record model="ir.ui.view" id="blb_appraisals.type_appraisal_form">
+      <field name="name">BLB - Type of Appraisal Form</field>
+      <field name="model">blb_appraisals.type_appraisal</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="BLB - Type of Appraisal Form" />
+            <group>
+              <field name="name"/>
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <!-- BLB Appraisal Ratings - explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_appraisals.ratings_form">
+      <field name="name">BLB - Appraisal Ratings Form</field>
+      <field name="model">blb_appraisals.ratings</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="BLB - Appraisal Ratings Form" />
+            <group>
+              <field name="rating"/>
+              <field name="particular"/>
+              <field name="score"/>
+            </group>        
+          </sheet>
+          <!-- <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> -->
+        </form>
+      </field>
+    </record>
+
+    <!-- BLB Appraisal Sections - explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_appraisals.sections_list">
+      <field name="name">BLB - Appraisal Sections List</field>
+      <field name="model">blb_appraisals.sections</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="type_section"/>
+          <field name="title"/>
+          <field name="description"/>
+          <field name="rating_ids" widget='many2many_tags'/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB - Appraisal Sections explicit form view definition -->
+    <record model="ir.ui.view" id="blb_appraisals.sections_form">
+      <field name="name">BLB - Sections Form</field>
+      <field name="model">blb_appraisals.sections</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="BLB - Sections Form" />
+            <group>
+              <field name="type_section"/>
+              <field name="title"/>
+              <field name="description"/>
+            </group> 
+            <notebook colspan="4">
+              <page string="Ratings">
+                <field name="rating_ids">  
+                  <tree string="Ratings">
+                    <field name="rating"/>
+                    <field name="particular"/>
+                    <field name="score"/>
+                  </tree>                  
+                </field>
+              </page> 
+            </notebook>     
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>   
+        </form>
+      </field>
+    </record>
+
+    <!-- BLB Appraisal Activity/Questions - explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_appraisals.activity_questions_list">
+      <field name="name">BLB - Appraisal Activity/Questions List</field>
+      <field name="model">blb_appraisals.activity_questions</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="type_appraisal"/>
+          <field name="section_id"/>
+          <field name="factor_objective"/>
+          <field name="activity_question"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB - Appraisal Activity/Questions explicit form view definition -->
+    <record model="ir.ui.view" id="blb_appraisals.activity_questions_form">
+      <field name="name">BLB - Appraisal Activity/Questions Form</field>
+      <field name="model">blb_appraisals.activity_questions</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="BLB - Appraisal Activity/Questions Form" />
+            <group>
+              <field name="type_appraisal"/>
+              <field name="section_id"/>
+              <field name="factor_objective"/>
+              <field name="activity_question"/>
+              <field name="target"/>
+              <field name="weight"/>
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB - Section Activity Questions  explicit form view definition ************************************************************** -->
+    <record model="ir.ui.view" id="blb_appraisals.section_a_lines_form">
+      <field name="name">Appraisal Section A - Form</field>
+      <field name="model">blb_appraisals.section_a_lines</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="Appraisal Section A" />
+            <group>
+                <group>
+                  <field name="question_id" invisible="1"/>
+                  <field name="factor_objective" readonly="1"/>
+                  <field name="activity_question" readonly="1"/>
+                  <field name="target" attrs="{'invisible':[('target','=',False)]}" readonly="1"/>
+                  <field name="weight" attrs="{'invisible':[('weight','=',0)]}" readonly="1"/>
+                  <field name="actual_achievement" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                </group>
+                <group>
+                  <field name="self_rating" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])], 
+                    'invisible':[('self_rating_figure','!=',0.0),('self_rating_figure','!=',False)]}"/>
+
+                  <field name="self_rating_figure" readonly="1" 
+                    attrs="{'invisible':['|',('self_rating_figure','=',0.0),('self_rating_figure','=',False)]}" />
+
+                  <field name="appraiser_rating" attrs="{'required':[('status','=','pending_supervisor_approval')], 
+                    'readonly':[('status','in',['pending_hr_approval','closed'])], 
+                    'invisible':[('appraiser_rating_figure','!=',0.0),('appraiser_rating_figure','!=',False)]}"/>
+
+                  <field name="appraiser_rating_figure" readonly="1"
+                    attrs="{'invisible':['|',('appraiser_rating_figure','=',0.0),('appraiser_rating_figure','=',False)]}"/>
+
+                  <field name="appraiser_comments" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                  <field name="weighted_rating" invisible="1"/>
+                  <field name="status" invisible="1"/>
+                </group>
+            </group>        
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_appraisals.section_b_lines_form">
+      <field name="name">Appraisal Section B - Form</field>
+      <field name="model">blb_appraisals.section_b_lines</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="Appraisal Section B" />
+            <group>
+                <group>
+                  <field name="question_id" invisible="1"/>
+                  <field name="factor_objective" readonly="1"/>
+                  <field name="activity_question" readonly="1"/>
+                  <field name="target" attrs="{'invisible':[('target','=',False)]}" readonly="1"/>
+                  <field name="weight" attrs="{'invisible':[('weight','=',0)]}" readonly="1"/>
+                  <field name="actual_achievement" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                </group>
+                <group>
+                  <field name="self_rating" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])], 
+                    'invisible':[('self_rating_figure','!=',0.0),('self_rating_figure','!=',False)]}"/>
+
+                  <field name="self_rating_figure" readonly="1" 
+                    attrs="{'invisible':['|',('self_rating_figure','=',0.0),('self_rating_figure','=',False)]}" />
+
+                  <field name="appraiser_rating" attrs="{'required':[('status','=','pending_supervisor_approval')], 
+                    'readonly':[('status','in',['pending_hr_approval','closed'])], 
+                    'invisible':[('appraiser_rating_figure','!=',0.0),('appraiser_rating_figure','!=',False)]}"/>
+
+                  <field name="appraiser_rating_figure" readonly="1"
+                    attrs="{'invisible':['|',('appraiser_rating_figure','=',0.0),('appraiser_rating_figure','=',False)]}"/>
+                    
+                  <field name="appraiser_comments" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                  <field name="weighted_rating" invisible="1"/>
+                  <field name="status" invisible="1"/>
+                </group>
+            </group>        
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_appraisals.section_c_lines_form">
+      <field name="name">Appraisal Section C - Form</field>
+      <field name="model">blb_appraisals.section_c_lines</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="Appraisal Section C" />
+            <group>
+                <group>
+                  <field name="question_id" invisible="1"/>
+                  <field name="factor_objective" readonly="1"/>
+                  <field name="activity_question" readonly="1"/>
+                  <field name="target" attrs="{'invisible':[('target','=',False)]}" readonly="1"/>
+                  <field name="weight" attrs="{'invisible':[('weight','=',0)]}" readonly="1"/>
+                  <field name="actual_achievement" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                </group>
+                <group>
+                  <field name="self_rating" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])], 
+                    'invisible':[('self_rating_figure','!=',0.0),('self_rating_figure','!=',False)]}"/>
+
+                  <field name="self_rating_figure" readonly="1" 
+                    attrs="{'invisible':['|',('self_rating_figure','=',0.0),('self_rating_figure','=',False)]}" />
+
+                  <field name="appraiser_rating" attrs="{'required':[('status','=','pending_supervisor_approval')], 
+                    'readonly':[('status','in',['pending_hr_approval','closed'])], 
+                    'invisible':[('appraiser_rating_figure','!=',0.0),('appraiser_rating_figure','!=',False)]}"/>
+
+                  <field name="appraiser_rating_figure" readonly="1"
+                    attrs="{'invisible':['|',('appraiser_rating_figure','=',0.0),('appraiser_rating_figure','=',False)]}"/>
+
+                  <field name="appraiser_comments" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                  <field name="weighted_rating" invisible="1"/>
+                  <field name="status" invisible="1"/>
+                </group>
+            </group>        
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_appraisals.section_d_lines_form">
+      <field name="name">Appraisal Section D - Form</field>
+      <field name="model">blb_appraisals.section_d_lines</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="Appraisal Section D" />
+            <group>
+                <group>
+                  <field name="question_id" invisible="1"/>
+                  <field name="factor_objective" readonly="1"/>
+                  <field name="activity_question" readonly="1"/>
+                  <field name="target" attrs="{'invisible':[('target','=',False)]}" readonly="1"/>
+                  <field name="weight" attrs="{'invisible':[('weight','=',0)]}" readonly="1"/>
+                  <field name="actual_achievement" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                </group>
+                <group>
+                  <field name="self_rating" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])], 
+                    'invisible':[('self_rating_figure','!=',0.0),('self_rating_figure','!=',False)]}"/>
+
+                  <field name="self_rating_figure" readonly="1" 
+                    attrs="{'invisible':['|',('self_rating_figure','=',0.0),('self_rating_figure','=',False)]}" />
+
+                  <field name="appraiser_rating" attrs="{'required':[('status','=','pending_supervisor_approval')], 
+                    'readonly':[('status','in',['pending_hr_approval','closed'])], 
+                    'invisible':[('appraiser_rating_figure','!=',0.0),('appraiser_rating_figure','!=',False)]}"/>
+
+                  <field name="appraiser_rating_figure" readonly="1"
+                    attrs="{'invisible':['|',('appraiser_rating_figure','=',0.0),('appraiser_rating_figure','=',False)]}"/>
+                    
+                  <field name="appraiser_comments" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                  <field name="weighted_rating" invisible="1"/>
+                  <field name="status" invisible="1"/>
+                </group>
+            </group>        
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB Appraisals - explicit kanban view definition *************************************************************************** --> 
+    <record model="ir.ui.view" id="blb_appraisals.blb_appraisals_kanban_view" >
+      <field name="name">BLB Appraisals</field>
+      <field name="model">blb_appraisals.blb_appraisals</field>
+      <field name="arch" type="xml">
+        <kanban create="false">
+          <templates>
+            <t t-name="kanban-box">
+              <div class="oe_kanban_global_click">
+                <div class="o_kanban_image">
+                  <img src="/blb_appraisals/static/description/icon.png" class="o_kanban_image" alt="Recommendation/Action"/>
+                </div>
+                <div class="oe_kanban_details">                  
+                  <ul> 
+                    <li> <span style="color:#000088; font-size:14px;"> <strong> <field name="name"/> </strong> </span> </li>                  
+                    <li> <span style="color:#000000; font-size:12px;"> Title:  <strong><field name="job_title"></field> </strong></span> </li>
+                    <li> <span style="color:#000000; font-size:12px;"> Department: <strong><field name="department_id"/> </strong></span> </li>
+                    <li> <span style="color:#000000; font-size:12px;"> Branch: <strong><field name="blb_branch"/> </strong></span> </li>
+                    <li> <span style="color:#000000; font-size:12px;"> Supervisor: <strong><field name="supervisor_employee_id"/> </strong></span> </li>
+                  </ul>                  
+                  <field name="status" decoration-info="status=='added'" decoration-warning="status=='pending_supervisor_approval'" 
+                    decoration-primary="status=='pending_hr_approval'" decoration-muted="status=='closed'" widget="badge" optional="show"/>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record> 
+
+    <!-- BLB Appraisals - explicit list view definition --> 
+    <record model="ir.ui.view" id="blb_appraisals.blb_appraisals_list">
+      <field name="name">BLB Appraisals List</field>
+      <field name="model">blb_appraisals.blb_appraisals</field>
+      <field name="arch" type="xml">
+        <tree decoration-info="status=='added'" decoration-warning="status=='pending_supervisor_approval'" 
+          decoration-primary="status=='pending_hr_approval'" decoration-muted="status=='closed'" create="false">
+          <field name="name"/>
+          <field name="job_title"/>
+          <field name="department_id"/>
+          <field name="blb_branch"/>
+          <field name="supervisor_employee_id"/>
+          <field name="type_appraisal"/>
+          <field name="status" decoration-info="status=='added'"  decoration-warning="status=='pending_supervisor_approval'" 
+            decoration-primary="status=='pending_hr_approval'" decoration-muted="status=='closed'" widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Appraisals - explicit form view definition --> 
+    <record model="ir.ui.view" id="blb_appraisals.groundrent_revision_form">
+      <field name="name">BLB Appraisals Form</field>
+      <field name="model">blb_appraisals.blb_appraisals</field>
+      <field name="arch" type="xml">
+        <form create="false">   
+          <header>
+            <button name="action_to_supervisor" string="Forward to Supervisor for Approval" type="object" status="added" class="btn-primary" 
+              attrs="{'invisible':[('status','!=','added')]}"/>
+            <button name="action_supervisor_approved" string="Approved By Supervisor" type="object" status="pending_supervisor_approval" 
+                class="btn-success" attrs="{'invisible':[('status','!=','pending_supervisor_approval')]}"/>
+            <button name="action_hr_approved" string="HR Approved. Mark as Closed" type="object" status="pending_hr_approval" class="btn-success"
+              attrs="{'invisible':[('status','!=','pending_hr_approval')]}" groups="blb_base.blb_hr_officer"/>
+
+            <field name="status" widget="statusbar" statusbar_visible="added,pending_supervisor_approval,pending_hr_approval,closed"/>
+          </header>
+          <sheet>
+            <separator string="BLB Appraisal Form" />
+            <group>
+                <group>
+                  <field name="employee_id"/>
+                  <field name="job_title"/>
+                  <field name="department_id"/>
+                  <field name="blb_branch"/>
+                  <field name="supervisor_employee_id"/>
+                </group>
+                <group>
+                    <field name="review_from" attrs="{'readonly':[('status','!=','added')]}"/> 
+                    <field name="review_to" attrs="{'readonly':[('status','!=','added')]}"/>
+                    <field name="type_appraisal" attrs="{'readonly':[('status','!=','added')]}" readonly="1"/>
+                    <field name="date_created"/>
+                    <field name="date_approved_supervisor" attrs="{'invisible':[('status','=','added')]}"/>
+                    <field name="date_approved_hr" attrs="{'invisible':[('status','in',['added','pending_supervisor_approval'])]}"/>
+                    <field name="status" invisible="1"/> 
+                    <field name="section_a" invisible="1"/> 
+                    <field name="section_b" invisible="1"/> 
+                    <field name="section_c" invisible="1"/> 
+                    <field name="section_d" invisible="1"/> 
+                </group>
+            </group>   
+            <notebook colspan="4">
+              <page string="Section A" attrs="{'invisible':[('section_a','=',False)]}">
+                <field name="section_a_lines" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}">  
+                  <tree string="Section A">
+                    <field name="factor_objective"/>
+                    <field name="activity_question"/>
+                    <field name="self_rating_figure"/>
+                    <field name="appraiser_rating_figure"/>
+                    <field name="weighted_rating" attrs="{'invisible':[('weighted_rating','=',False)]}"/>
+                    <field name="status" invisible="1"/>
+                  </tree>                  
+                </field>
+              </page> 
+              <page string="Section B" attrs="{'invisible':[('section_b','=',False)]}">
+                <field name="section_b_lines" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}">  
+                  <tree string="Section B">
+                    <field name="factor_objective"/>
+                    <field name="activity_question"/>
+                    <field name="self_rating_figure"/>
+                    <field name="appraiser_rating_figure"/>
+                    <field name="weighted_rating" attrs="{'invisible':[('weighted_rating','=',False)]}"/>
+                    <field name="status" invisible="1"/>
+                  </tree>                  
+                </field>
+              </page>
+              <page string="Section C" attrs="{'invisible':[('section_c','=',False)]}">
+                <field name="section_c_lines" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}">  
+                  <tree string="Section C">
+                    <field name="factor_objective"/>
+                    <field name="activity_question"/>
+                    <field name="self_rating_figure"/>
+                    <field name="appraiser_rating_figure"/>
+                    <field name="weighted_rating" attrs="{'invisible':[('weighted_rating','=',False)]}"/>
+                    <field name="status" invisible="1"/>
+                  </tree>                  
+                </field>
+              </page>
+              <page string="Section D" attrs="{'invisible':[('section_d','=',False)]}">
+                <field name="section_d_lines" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}">  
+                  <tree string="Section D">
+                    <field name="factor_objective"/>
+                    <field name="activity_question"/>
+                    <field name="self_rating_figure"/>
+                    <field name="appraiser_rating_figure"/>
+                    <field name="weighted_rating" attrs="{'invisible':[('weighted_rating','=',False)]}"/>
+                    <field name="status" invisible="1"/>
+                  </tree>                  
+                </field>
+              </page>
+
+              <page string="Overall Assessment" attrs="{'invisible':[('type_appraisal','=',False)]}"> 
+                <group>
+                    <field name="overall_assessment_a" attrs="{'invisible':[('section_a','=',False)]}"/>
+                    <field name="overall_assessment_b" attrs="{'invisible':[('section_b','=',False)]}"/>
+                    <field name="overall_assessment_c" attrs="{'invisible':[('section_c','=',False)]}"/>
+                    <field name="overall_assessment_d" attrs="{'invisible':[('section_d','=',False)]}"/>
+                    <field name="overall_assessment_total"/> 
+                    <field name="total_score_points"/>
+                </group>
+              </page>
+              <page string="Comments" attrs="{'invisible':[('type_appraisal','=',False)]}">
+                <group>
+                    <field name="comments_employee" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                    <field name="comments_supervisor" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                    <field name="recommendations_supervisor" attrs="{'readonly':[('status','in',['pending_hr_approval','closed'])]}"/>
+                    <field name="recommendations_hod" attrs="{'readonly':[('status','in',['closed'])]}"/>
+                </group>
+              </page>
+            </notebook>     
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- Add Appraisal Wizard - explicit form view definition -->  
+    <record model="ir.ui.view" id="blb_appraisals.blb_appraisal_wizard_form">
+      <field name="name">Add Appraisal Wizard</field>
+      <field name="model">blb_appraisals.blb_appraisal_wizard</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <form string="Add Appraisal Wizard" create="false" edit="false">
+          <sheet>
+            <separator string="Select Dates and Type of Appraisal"/>
+            <group>          
+              <field name="from_date"/>
+              <field name="to_date"/>
+              <field name="type_appraisal"/>
+            </group>
+          </sheet>
+          <footer>             
+            <button name="get_selected_variables" type="object" string="Add Appraisal" class="oe_highlight"/> 
+            <button string="Cancel" special="cancel" class="btn-default"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_appraisals.action_window_type_appraisal">
+      <field name="name">Types of Appraisal</field>
+      <field name="res_model">blb_appraisals.type_appraisal</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_appraisals.action_window_sections">
+      <field name="name">Appraisal Sections</field>
+      <field name="res_model">blb_appraisals.sections</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_appraisals.action_window_activity_questions">
+      <field name="name">Appraisal Activity/Questions</field>
+      <field name="res_model">blb_appraisals.activity_questions</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_appraisals.action_window_blb_appraisals_all">
+      <field name="name">All Appraisals</field>
+      <field name="res_model">blb_appraisals.blb_appraisals</field>
+      <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_appraisals.action_window_blb_appraisals_pending_supervisor_approval">
+      <field name="name">Appraisals - Pending Supervisor Approval</field>
+      <field name="res_model">blb_appraisals.blb_appraisals</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="domain">[('status','=', 'pending_supervisor_approval')]</field> 
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_appraisals.action_window_pending_hr_approval">
+      <field name="name">Appraisals - Pending HR Approval</field>
+      <field name="res_model">blb_appraisals.blb_appraisals</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="domain">[('status','=', 'pending_hr_approval')]</field> 
+    </record>
+
+    <record id="blb_appraisals.action_blb_appraisal_wizard" model="ir.actions.act_window">
+        <field name="name">Add Appraisal Wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">blb_appraisals.blb_appraisal_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="blb_appraisals.blb_appraisal_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+    <!-- <record model="ir.actions.server" id="blb_appraisals.action_server">
+      <field name="name">blb_appraisals server</field>
+      <field name="model_id" ref="model_blb_appraisals_blb_appraisals"/>
+      <field name="status">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record> -->
+
+
+    <!-- Top menu item -->
+    <menuitem name="Appraisals" id="blb_appraisals.menu_root" web_icon="blb_appraisals,static/description/icon.png" sequence="76"/>
+
+    <!-- menu categories -->
+    <menuitem name="Appraisals" id="blb_appraisals.menu_1" parent="blb_appraisals.menu_root" sequence="1"/>
+
+    <menuitem name="Create/Add Appraisal" id="blb_appraisals.menu_add_appraisal" parent="blb_appraisals.menu_root" 
+      action="blb_appraisals.action_blb_appraisal_wizard" sequence="2"/>
+
+    <menuitem name="Setup" id="blb_appraisals.menu_setup" parent="blb_appraisals.menu_root" sequence="3" groups="blb_base.blb_hr_officer,blb_base.blb_lmis_ict"/> 
+
+
+
+    <!-- actions -->
+    <menuitem name="All Appraisals" id="blb_appraisals.menu_all_appraisals" parent="blb_appraisals.menu_1" 
+        action="blb_appraisals.action_window_blb_appraisals_all" sequence="1"/>
+
+    <menuitem name="Pending Supervisor Approval" id="blb_appraisals.menu_appraisals_pending_supervisor" parent="blb_appraisals.menu_1" 
+        action="blb_appraisals.action_window_blb_appraisals_pending_supervisor_approval" sequence="2"/>
+
+    <menuitem name="Pending HR Approval" id="blb_appraisals.menu_appraisals_pending_hr" parent="blb_appraisals.menu_1" 
+        action="blb_appraisals.action_window_pending_hr_approval" sequence="3"/>
+
+
+
+    <menuitem name="Types of Appraisal" id="blb_appraisals.menu_types_appraisal" parent="blb_appraisals.menu_setup" 
+        action="blb_appraisals.action_window_type_appraisal" sequence="1"/>
+    <menuitem name="Appraisal Sections" id="blb_appraisals.menu_sections" parent="blb_appraisals.menu_setup" 
+        action="blb_appraisals.action_window_sections" sequence="2"/>
+    <menuitem name="Activities/Questions" id="blb_appraisals.menu_activity_questions" parent="blb_appraisals.menu_setup" 
+        action="blb_appraisals.action_window_activity_questions" sequence="4"/>
+    
+
+  </data>
+</odoo>

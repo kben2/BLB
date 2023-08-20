@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_blb_valuation_blb_valuation,blb_valuation.blb_valuation,model_blb_valuation_blb_valuation,base.group_user,1,1,1,1

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="blb_valuation.groundrent_revision_print">
+            <t t-call="web.basic_layout">
+                <!-- <t t-set="doc"/> t-value="doc.with_context({'lang':doc.create_uid.partner_id.lang})" -->
+                <div class="page">
+                    <div style="align-items-center">
+                        <img src='/blb_valuation/static/src/img/blb_logo.png' width="100%" height="100%"/>
+                    </div> <br/> <br/> 
+
+                    <t t-foreach="docs" t-as="doc">
+                        <div class="oe_structure"/>
+                        <!-- <h2 class="mt16">
+                            <div class="header" style="text-align:center;"><strong>Receipt</strong></div> 
+                        </h2>  -->                         
+                        <div class="row mt32 mb32">                      
+                            <div name="partner_address" class="col-xs-3" style="padding-left:20px;">
+                                <span t-if="doc.date_last_revision"> 
+                                    <strong>Date:</strong> 
+                                    <span t-field="doc.date_last_revision"/> 
+                                 </span> <br/> <br/> 
+                                <h2 class="mt16">
+                                    <div><strong>Ground Rent Revision</strong></div>
+                                </h2>  
+                            </div>                         
+                        </div>
+                        <br/> 
+                        <table class="table table-condensed">
+                            <tbody class="tbody">
+                                <tr style="border-top:1px blue solid !important;">
+                                    <td> <b><span>Client:</span></b> </td>
+                                    <td class="text-left"> <span t-field="doc.client_no.name"/> </td>
+                                </tr>
+                                <tr>
+                                    <td> <b><span>Date Start of Lease:</span></b> </td>
+                                    <td class="text-left"> <span t-field="doc.date_lease_start"/> </td>
+                                </tr>
+                                <tr>
+                                    <td> <b><span>Ground Rent:</span></b> </td>
+                                    <td class="text-left"> <span t-field="doc.current_ground_rent"/> </td>
+                                </tr>
+                                <tr style="border-bottom:1px blue solid !important;">
+                                    <td> <b><span>Next Revision Date:</span></b> </td>
+                                    <td class="text-left"> <span t-field="doc.date_next_revision"/> </td>
+                                </tr>
+                            </tbody>
+                        </table> <br/>
+
+                        <div class="col-xs-3" style="padding-left:20px;">
+                            <p style="font-size:18px; color:#000088;"> <strong><u> Revision Details </u></strong> </p>
+                        </div> 
+
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr style="background-color:#F9F9FB !important;">
+                                    <th class="text-left"><strong> Date of Revision </strong></th>
+                                    <th class="text-left"><strong> Next Revision Date </strong></th>
+                                    <th class="text-left"><strong> Ground Rent </strong></th>
+                                </tr>
+                            </thead> 
+                            <tbody class="tbody">
+                                <t t-foreach="doc.revision_line_ids" t-as="revdoc">
+                                    <tr style="border-top:1px blue solid !important;">
+                                        <td class="text-left"> <span t-field="revdoc.date_revision"/> </td>
+                                        <td class="text-left"> <span t-field="revdoc.date_next_revision"/> </td>
+                                        <td class="text-left"> <span t-field="revdoc.ground_rent"/> </td>
+                                    </tr>
+                                </t>
+                                <tr style="border-bottom:1px blue solid !important; color:#FFFFFF;"> <td></td><td></td><td></td> </tr>
+                            </tbody>
+                        </table> <br/><br/>
+
+                        <div class="col-xs-3" style="padding-left:20px;">
+                            <table style="border:0px">
+                                <tr>
+                                    <td>
+                                        <p> <b> Revised By. </b> </p>
+                                        <br/><br/>
+                                        <span> ------------------------------------ </span>
+                                        <p> <b> <span t-field="doc.create_uid.name"/> </b> </p>
+                                    </td> 
+                                    <td style="width:200px"> <br/> </td>
+                                    <td>
+                                        <p> <b> Reviewed By. </b>  </p>
+                                        <br/><br/>
+                                        <span> ------------------------------------ </span>
+                                        <p> <b> <span t-field="doc.head_pps.name"/>, Head of Department - PPSR </b> </p>
+                                    </td>
+                                </tr>
+                            </table> 
+                            <br/><br/><br/>
+                            <p style="text-align:center;">Thank You! Buganda Land Board.</p>
+                        </div>
+                    </t>
+
+                </div>
+            </t>
+        </template>
+
+
+        <template id="groundrentrevision_print">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="blb_valuation.groundrent_revision_print" t-lang="doc.create_uid.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

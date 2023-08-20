@@ -1,0 +1,243 @@
+<odoo>
+  <data>
+    <!-- BLB - Correspondence - explicit list view definition -->
+    <record model="ir.ui.view" id="blb_correspondence.blb_correspondence_list">
+      <field name="name">BLB - Correspondence</field>
+      <field name="model">blb_correspondence.blb_correspondence</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='pending_assignment'" decoration-primary="status=='assigned_opm' or status=='assigned_survey' or 
+            status=='assigned_planning' or status=='assigned_valuation' or status=='assigned_enforcement' or status=='assigned_research'" 
+            decoration-info="status=='assigned_surveyor' or status=='assigned_planner' or status=='assigned_valuer' 
+            or status=='assigned_enforcer' or status=='assigned_researcher'"            
+            decoration-success="status=='feedback_given'" decoration-muted="status=='closed'">
+          <field name="date_request"/>
+          <field name="name"/>
+          <field name="type_request"/>
+          <field name="request"/>
+          <field name="allocated_to"/>
+          <field name="status" decoration-warning="status=='pending_assignment'" 
+            decoration-primary="status=='assigned_opm' or status=='assigned_survey' or status=='assigned_planning' or status=='assigned_valuation' or status=='assigned_enforcement' or status=='assigned_research'" 
+            decoration-info="status=='assigned_surveyor' or status=='assigned_planner' or status=='assigned_valuer' or status=='assigned_enforcer' or status=='assigned_researcher'" decoration-success="status=='feedback_given'" decoration-muted="status=='closed'" 
+            widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB - Correspondence - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_correspondence.blb_correspondence_form">
+      <field name="name">BLB - Correspondence Form</field>
+      <field name="model">blb_correspondence.blb_correspondence</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_to_unit" string="Assign to OPM" type="object" status="pending_assignment"  
+              attrs="{'invisible':['|',('type_request','!=','OPM Request'),('status','!=','pending_assignment')]}" class="btn-primary"/>
+
+            <button name="action_to_unit" string="Assign to Survey Unit" type="object" status="pending_assignment"  
+              attrs="{'invisible':[('type_request','!=','Survey Request'),'|',('status','!=','pending_assignment'),('status','!=','assigned_opm')]}" 
+              class="btn-primary" groups="blb_base.blb_opm_pps,blb_base.blb_head_pps"/>
+
+            <button name="action_to_unit" string="Assign to Planning Unit" type="object" status="pending_assignment"  
+              attrs="{'invisible':[('type_request','!=','Planning Request'),'|',('status','!=','pending_assignment'),('status','!=','assigned_opm')]}" 
+              class="btn-primary" groups="blb_base.blb_opm_pps,blb_base.blb_head_pps"/>
+
+            <button name="action_to_unit" string="Assign to Valuation Unit" type="object" status="pending_assignment"  
+              attrs="{'invisible':[('type_request','!=','Valuation Request'),'|',('status','!=','pending_assignment'),('status','!=','assigned_opm')]}" 
+              class="btn-primary" groups="blb_base.blb_opm_pps,blb_base.blb_head_pps"/>
+
+            <button name="action_to_unit" string="Assign to Enforcement Unit" type="object" status="pending_assignment"  
+              attrs="{'invisible':[('type_request','!=','Enforcer Request'),'|',('status','!=','pending_assignment'),('status','!=','assigned_opm')]}" 
+              class="btn-primary" groups="blb_base.blb_opm_pps,blb_base.blb_head_pps"/>
+
+            <button name="action_to_unit" string="Assign to Research" type="object" status="pending_assignment"  
+              attrs="{'invisible':[('type_request','!=','Research Request'),'|',('status','!=','pending_assignment'),('status','!=','assigned_opm')]}" 
+              class="btn-primary" groups="blb_base.blb_opm_pps,blb_base.blb_head_pps"/>
+
+            <button name="action_assigned_surveyor" string="Allocate Work" type="object" status="assigned_survey" 
+              attrs="{'invisible':['|',('type_request','!=','Survey Request'),('status','!=','assigned_survey')]}" class="btn-primary"/>
+            <button name="action_assigned_planner" string="Allocate Work" type="object" status="assigned_planning" class="btn-primary"
+              attrs="{'invisible':['|',('type_request','!=','Planning Request'),('status','!=','assigned_planning')]}" />
+            <button name="action_assigned_valuer" string="Allocate Work" type="object" status="assigned_valuation" class="btn-primary"
+              attrs="{'invisible':['|',('type_request','!=','Valuation Request'),('status','!=','assigned_valuation')]}" />
+            <button name="action_assigned_enforcer" string="Allocate Work" type="object" status="assigned_enforcement" class="btn-primary"
+              attrs="{'invisible':['|',('type_request','!=','Enforcer Request'),('status','!=','assigned_enforcement')]}" />
+            <button name="action_assigned_researcher" string="Allocate Work" type="object" status="assigned_research" class="btn-primary"
+              attrs="{'invisible':['|',('type_request','!=','Research Request'),('status','!=','assigned_research')]}" />
+
+            <button name="action_feedback_given" string="Give Feedback" type="object" 
+                status="assigned_opm,assigned_surveyor,assigned_planner,assigned_valuer,assigned_enforcer,assigned_researcher" class="btn-primary"
+                attrs="{'invisible':[('status','!=','assigned_opm'),('status','!=','assigned_surveyor'),
+                  ('status','!=','assigned_planner'),('status','!=','assigned_valuer'),('status','!=','assigned_enforcer'),
+                  ('status','!=','assigned_researcher')]}" />
+            <button name="action_closed" string="Close Request" type="object" status="feedback_given" class="btn-primary" 
+              attrs="{'invisible':[('status','!=','feedback_given')]}" groups="blb_base.blb_opm_pps,blb_base.blb_head_pps"/>
+
+            <field name="status" widget="statusbar" 
+              statusbar_visible="pending_assignment,assigned_opm,assigned_survey,assigned_planning,assigned_valuation,assigned_enforcement,
+                assigned_research,feedback_given,closed"/>
+          </header>
+          <sheet>
+            <separator string="BLB - Correspondence Form" />
+            <group>
+              <field name="date_request" attrs="{'readonly': [('status','!=','pending_assignment')]}"/>
+              <field name="type_client" attrs="{'readonly': [('status','!=','pending_assignment')]}"/>
+
+              <field name="client_file_no" attrs="{'invisible':[('type_client','!=','BLB Client')], 'required':[('type_client','=','BLB Client')], 
+                'readonly': [('status','!=','pending_assignment')]}"/>
+              <field name="client_other" attrs="{'invisible':[('type_client','!=','Other')], 'required':[('type_client','=','Other')], 
+                'readonly': [('status','!=','pending_assignment')]}"/>
+
+              <field name="type_request" attrs="{'readonly': [('status','!=','pending_assignment'),('status','!=','assigned_opm')]}"/>
+              <field name="request" attrs="{'readonly': [('status','!=','pending_assignment')]}"/>
+              <field name="remarks" attrs="{'readonly': [('status','!=','pending_assignment')]}"/>
+
+              <field name="allocated_to" attrs="{'invisible':['|',('status','=','pending_assignment'),('status','=','assigned_opm')], 
+                'readonly': ['|','|','|','|','|','|',('status','=','assigned_surveyor'),('status','=','assigned_planner'),
+                  ('status','=','assigned_valuer'),('status','=','assigned_enforcer'),('status','=','assigned_researcher'),
+                  ('status','=','feedback_given'),('status','=','closed')]}"/>
+              <field name="date_allocated" attrs="{'invisible':['|',('status','=','pending_assignment'),('status','=','assigned_opm')]}"/>
+
+              <field name="report" filename="report_name" attrs="{'invisible':[('status','!=','assigned_opm'),('status','!=','assigned_surveyor'),
+                  ('status','!=','assigned_planner'),('status','!=','assigned_valuer'),('status','!=','assigned_enforcer'),
+                  ('status','!=','assigned_researcher'),('status','!=','feedback_given'),('status','!=','closed')],                  
+                'readonly': ['|',('status','=','feedback_given'),('status','=','closed')]}" />
+                <!-- 'required': [('status','=','assigned_opm'),('status','=','assigned_surveyor'),('status','=','assigned_planner'),
+                  ('status','=','assigned_valuer'),('status','=','assigned_enforcer'),('status','=','assigned_researcher')], -->
+
+              <field name="report_name" invisible="1"/>
+              <field name="report_remarks" attrs="{'invisible':[('status','!=','assigned_opm'),('status','!=','assigned_surveyor'),
+                  ('status','!=','assigned_planner'),('status','!=','assigned_valuer'),('status','!=','assigned_enforcer'),
+                  ('status','!=','assigned_researcher'),('status','!=','feedback_given'),('status','!=','closed')], 
+                'required': ['|','|','|','|',('status','=','assigned_surveyor'),('status','=','assigned_planner'),
+                  ('status','=','assigned_valuer'),('status','=','assigned_enforcer'),('status','=','assigned_researcher')], 
+                'readonly': ['|',('status','=','feedback_given'),('status','=','closed')]}" />  <!-- '|',('status','=','assigned_opm'), -->   
+
+              <field name="done_by" attrs="{'invisible':[('status','!=','feedback_given'),('status','!=','closed')]}" />
+              <field name="date_done" attrs="{'invisible':[('status','!=','feedback_given'),('status','!=','closed')]}" />
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_correspondence.action_window_blb_correspondence">
+      <field name="name">BLB - Correspondences</field>
+      <field name="res_model">blb_correspondence.blb_correspondence</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_correspondence.action_window_blb_correspondence_opm_request">
+      <field name="name">OPM Requests</field>
+      <field name="res_model">blb_correspondence.blb_correspondence</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('type_request','=','OPM Request')]</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_correspondence.action_window_blb_correspondence_survey_request">
+      <field name="name">Survey Requests</field>
+      <field name="res_model">blb_correspondence.blb_correspondence</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('type_request','=','Survey Request')]</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_correspondence.action_window_blb_correspondence_planning_request">
+      <field name="name">Planning Requests</field>
+      <field name="res_model">blb_correspondence.blb_correspondence</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('type_request','=','Planning Request')]</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_correspondence.action_window_blb_correspondence_valuation_request">
+      <field name="name">Valuation Requests</field>
+      <field name="res_model">blb_correspondence.blb_correspondence</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('type_request','=','Valuation Request')]</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_correspondence.action_window_blb_correspondence_research_request">
+      <field name="name">Research Requests</field>
+      <field name="res_model">blb_correspondence.blb_correspondence</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('type_request','=','Research Request')]</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_correspondence.action_window_blb_correspondence_allocated">
+      <field name="name">Allocated to Me</field>
+      <field name="res_model">blb_correspondence.blb_correspondence</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('allocated_to','=', uid)]</field>
+    </record>
+
+
+    <!-- server action to the one above --> 
+<!--
+    <record model="ir.actions.server" id="blb_correspondence.action_server">
+      <field name="name">blb_correspondence server</field>
+      <field name="model_id" ref="model_blb_correspondence_blb_correspondence"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+    <menuitem name="Correspondences" id="blb_correspondence.menu_root" web_icon="blb_correspondence,static/description/icon.png" sequence="15" 
+      groups="blb_base.blb_opm_pps,blb_base.blb_head_pps,blb_base.blb_administrator"/> 
+
+    <!-- menu categories -->
+    <menuitem name="Correspondences" id="blb_correspondence.correspondences" parent="blb_correspondence.menu_root" sequence="1" 
+      groups="blb_base.blb_opm_pps,blb_base.blb_head_pps,blb_base.blb_administrator" />
+
+    <menuitem name="Correspondences" id="blb_correspondence.correspondences_survey" parent="blb_survey.menu_root" sequence="2"
+      groups="blb_base.blb_survey"/>
+
+    <menuitem name="Correspondences" id="blb_correspondence.correspondences_planning" parent="blb_physicalplanning.menu_root" sequence="2"
+      groups="blb_base.blb_planning"/>
+
+    <menuitem name="Correspondences" id="blb_correspondence.correspondences_valuation" parent="blb_valuation.menu_root" sequence="2"
+      groups="blb_base.blb_valuation"/>
+
+
+    <!-- actions -->
+    <menuitem name="All Correspondences" id="blb_correspondence.correspondences_list" parent="blb_correspondence.correspondences" 
+        action="blb_correspondence.action_window_blb_correspondence" sequence="2" groups="blb_base.blb_opm_pps,blb_base.blb_head_pps"/>
+
+    <menuitem name="OPM Requests" id="blb_correspondence.correspondences_opm_requests" parent="blb_correspondence.correspondences" 
+        action="blb_correspondence.action_window_blb_correspondence_opm_request" sequence="1" groups="blb_base.blb_opm_pps"/>
+
+
+    <menuitem name="Survey Requests" id="blb_correspondence.correspondences_survey_requests" parent="blb_correspondence.correspondences_survey" 
+        action="blb_correspondence.action_window_blb_correspondence_survey_request" sequence="1" groups="blb_base.blb_survey_chief_surveyor"/>
+    <menuitem name="Research Requests" id="blb_correspondence.correspondences_research_requests" parent="blb_correspondence.correspondences_survey" 
+        action="blb_correspondence.action_window_blb_correspondence_research_request" sequence="2" groups="blb_base.blb_survey_chief_surveyor"/>
+    <menuitem name="Allocated to Me" id="blb_correspondence.correspondences_survey_requests_allocated" 
+      parent="blb_correspondence.correspondences_survey" action="blb_correspondence.action_window_blb_correspondence_allocated" sequence="3"/>
+
+    <menuitem name="Planning Requests" id="blb_correspondence.correspondences_planning_requests" parent="blb_correspondence.correspondences_planning" 
+        action="blb_correspondence.action_window_blb_correspondence_planning_request" sequence="1" groups="blb_base.blb_chief_planner"/>
+    <menuitem name="Allocated to Me" id="blb_correspondence.correspondences_planning_requests_allocated" 
+      parent="blb_correspondence.correspondences_planning" action="blb_correspondence.action_window_blb_correspondence_allocated" sequence="2"/>
+
+    <menuitem name="Valuation Requests" id="blb_correspondence.correspondences_valuation_requests" parent="blb_correspondence.correspondences_valuation" action="blb_correspondence.action_window_blb_correspondence_valuation_request" sequence="1" groups="blb_base.blb_chief_valuer"/>
+    <menuitem name="Allocated to Me" id="blb_correspondence.correspondences_valuation_requests_allocated" 
+      parent="blb_correspondence.correspondences_valuation" action="blb_correspondence.action_window_blb_correspondence_allocated" sequence="2"/>
+
+  </data>
+</odoo>

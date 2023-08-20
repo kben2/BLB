@@ -1,0 +1,188 @@
+<odoo>
+  <data>
+    <!-- BLB Physical Planning - explicit list view definition -->
+    <record model="ir.ui.view" id="blb_physicalplanning.blb_physicalplanning_list">
+      <field name="name">BLB Physical Planning List</field>
+      <field name="model">blb_physicalplanning.blb_physicalplanning</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='Pending Physical Planning Review'" decoration-primary="status=='Eligible'"
+            decoration-info="status=='Status Report Compiled'" decoration-success="status=='Completed'" decoration-muted="status=='Not Eligible'" >
+            <!-- decoration-primary="status=='Defer with Comments'" 
+            decoration-primary="status=='Eligible'"  
+            decoration-info="status=='Phyisical Planning Done'" -->
+          <field name="file_no"/>
+          <field name="plot_size"/>
+          <field name="plot_direct_access"/>
+          <field name="plot_in_wetland"/>
+          <field name="status" decoration-warning="status=='Pending Physical Planning Review'" decoration-primary="status=='Eligible'"
+            decoration-info="status=='Status Report Compiled'" decoration-success="status=='Completed'" decoration-muted="status=='Not Eligible'" 
+            widget="badge" optional="show"/>
+            <!-- decoration-primary="status=='Defer with Comments'" 
+            decoration-primary="status=='Eligible'" 
+            decoration-info="status=='Phyisical Planning Done'"  -->
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Physical Planning - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_physicalplanning.blb_physicalplanning_form">
+      <field name="name">BLB Physical Planning Form</field>
+      <field name="model">blb_physicalplanning.blb_physicalplanning</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_to_not_eligible" string="Not Eligible" type="object" status="pending_physical_review" class="btn-primary"/>
+            <button name="action_to_status_report" string="Status Report Compiled" type="object" status="not_eligible" class="btn-primary"/>
+            <button name="action_to_defer_comments" string="Defer with Comments" type="object" status="not_eligible" class="btn-primary"/>
+            <button name="action_mark_survey_job_done" string="Mark Job Done" type="object" status="defer_comments" class="btn-primary"/>
+
+            <button name="action_to_eligible" string="Eligible" type="object" status="pending_physical_review" class="btn-primary"/>
+            <button name="action_to_planning_done" string="Planning Done" type="object" status="eligible" class="btn-primary"/>
+            <button name="action_mark_completed" string="Completed" type="object" status="planning_done" class="btn-primary"/>
+
+            <field name="status" widget="statusbar" statusbar_visible="pending_physical_review,status_report,defer_comments,planning_done,complete"/>
+          </header>
+          <sheet>
+            <separator string="BLB Physical Planning Form" />
+            <group>
+              <field name="file_no"/>
+              <field name="plot_size"/>
+              <field name="plot_direct_access"/>
+              <field name="plot_in_wetland"/>
+
+              <field name="status_report" filename="status_report_name" attrs="{'invisible':[('status','!=','not_eligible')]}"/>  
+              <field name="status_report_name" invisible="1"/>
+              <field name="defer_comments" attrs="{'invisible':[('status','!=','not_eligible')]}"/>
+
+              <field name="survey_job_form" filename="survey_job_form_name" attrs="{'invisible':[('status','!=','defer_comments')]}"/>  
+              <field name="survey_job_form_name" invisible="1"/>
+
+              <field name="planning_form" filename="planning_form_name" 
+                attrs="{'invisible':['|','|', ('status','!=','eligible'),('status','!=','planning_done'),('status','!=','completed')]}"/>  
+              <field name="planning_form_name" invisible="1"/>
+              <field name="processed_by" 
+                attrs="{'invisible':['|','|', ('status','!=','eligible'),('status','!=','planning_done'),('status','!=','completed')]}"/>
+            </group>        
+          </sheet>
+          <!-- <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> -->
+        </form>
+      </field>
+    </record>
+
+
+
+    <!-- BLB Physical Planning - explicit list view definition -->
+    <record model="ir.ui.view" id="blb_physicalplanning.consent_requests_list">
+      <field name="name">BLB Physical Consent Requests</field>
+      <field name="model">blb_physicalplanning.consent_requests</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='Pending Assessment'" decoration-info="status=='Under Valuation'"
+            decoration-success="status=='Consent to Develop'" >
+            <!-- decoration-info="success=='Consent to Sub-divide'" 
+            decoration-success="status=='Consent to Change of User'" -->
+          <field name="file_no"/>
+          <field name="type_request"/>
+          <field name="status" decoration-warning="status=='Pending Assessment'" 
+            decoration-info="status=='Under Valuation'" decoration-success="status=='Consent to Develop'" 
+            widget="badge" optional="show"/>
+            <!-- decoration-success="status=='Consent to Change of User'" 
+            decoration-info="success=='Consent to Sub-divide'"  -->
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Physical Planning - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_physicalplanning.blb_physicalplanning_form">
+      <field name="name">BLB Physical Planning Form</field>
+      <field name="model">blb_physicalplanning.consent_requests</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_consent_develop" string="Consent to Develop" type="object" status="pending_assessment"  
+              attrs="{'invisible':[('type_request','!=','develop')]}" class="btn-primary"/>
+            <button name="action_to_valuation_officer" string="Send to Valuation Officer" type="object" status="pending_assessment" 
+              attrs="{'invisible':[('type_request','=','develop')]}" class="btn-primary"/>
+            <button name="action_consent_subdivide" string="Consent to Sub-Divide" type="object" status="to_valuation_officer" 
+              attrs="{'invisible':[('type_request','!=','sub_divide')]}" class="btn-primary"/>
+            <button name="action_consent_changeuser" string="Consent to Change of User" type="object" status="to_valuation_officer" 
+              attrs="{'invisible':[('type_request','!=','change_user')]}" class="btn-primary"/>
+
+            <field name="status" widget="statusbar" 
+              statusbar_visible="pending_assessment,to_valuation_officer,consent_develop,consent_subdivide,consent_changeuser"/>
+          </header>
+          <sheet>
+            <separator string="BLB Physical Planning - Consent Requests Form" />
+            <group>
+              <field name="file_no"/>
+              <field name="type_request"/>
+
+              <field name="currency_id" invisible="1"/>
+              <field name="capital_value" attrs="{'invisible':['|',('status','=','pending_assessment'),('type_request','=','develop')], 
+                'required': [('status','=','to_valuation_officer')], 
+                'readonly': ['|', ('status','=','consent_subdivide'), ('status','=','consent_changeuser')]}" />
+              <field name="fees_payment" attrs="{'invisible':['|',('status','=','pending_assessment'),('type_request','=','develop')], 
+                'required': [('status','=','to_valuation_officer')], 
+                'readonly': ['|', ('status','=','consent_subdivide'), ('status','=','consent_changeuser')]}" />
+              <field name="remarks" attrs="{'invisible':['|',('status','=','pending_assessment'),('type_request','=','develop')], 
+                'required': [('status','=','to_valuation_officer')], 
+                'readonly': ['|', ('status','=','consent_subdivide'), ('status','=','consent_changeuser')]}" />
+              <field name="done_by" attrs="{'invisible':['|',('status','=','pending_assessment'),('type_request','=','develop')]}" />
+            </group>        
+          </sheet>
+          <!-- <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> -->
+        </form>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models  -->
+    <record model="ir.actions.act_window" id="blb_physicalplanning.action_window_blb_physicalplanning">
+      <field name="name">BLB Physical Planning</field>
+      <field name="res_model">blb_physicalplanning.blb_physicalplanning</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models  -->
+    <record model="ir.actions.act_window" id="blb_physicalplanning.action_window_consent_requests">
+      <field name="name">BLB Physical Planning - Consent Requests</field>
+      <field name="res_model">blb_physicalplanning.consent_requests</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- server action to the one above 
+    <record model="ir.actions.server" id="blb_physicalplanning.action_server">
+      <field name="name">blb_physicalplanning server</field>
+      <field name="model_id" ref="model_blb_physicalplanning_blb_physicalplanning"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record> -->
+
+    <!-- Top menu item -->
+    <menuitem name="Physical Planning" id="blb_physicalplanning.menu_root" web_icon="blb_physicalplanning,static/description/icon.png" sequence="9" 
+      groups="blb_base.blb_planning"/>
+
+    <!-- menu categories -->
+    <menuitem name="Physical Planning" id="blb_physicalplanning.client_files" parent="blb_physicalplanning.menu_root" sequence="1"/>
+    <menuitem name="Consent Requests" id="blb_physicalplanning.consent_requests" parent="blb_physicalplanning.menu_root" sequence="2"/>
+
+    <!-- actions -->
+    <menuitem name="Client Files" id="blb_physicalplanning.client_files_list" parent="blb_physicalplanning.client_files" 
+        action="blb_physicalplanning.action_window_blb_physicalplanning"/>
+    <menuitem name="All Requests" id="blb_physicalplanning.menu_consent_requests_list" 
+      parent="blb_physicalplanning.consent_requests" action="blb_physicalplanning.action_window_consent_requests"/>
+
+  </data>
+</odoo>

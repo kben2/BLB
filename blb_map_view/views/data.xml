@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+         <record model="ir.ui.view" id="hello_world_view_1">
+            <field name="model">blb_client.locate_query</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <hello_world display_contacts="1" >
+                </hello_world>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hello_world_view_2">
+            <field name="model">blb_client.locate_query</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <hello_world js_class="hello_world_evolution" display_contacts="1" >
+                </hello_world>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="first_hello_world_view">
+            <field name="name">Map View</field>
+            <field name="res_model">blb_client.locate_query</field>
+            <field name="view_mode">hello_world</field>
+            <field name="view_id" ref="hello_world_view_1"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="second_hello_world_view">
+            <field name="name">Map View</field>
+            <field name="res_model">blb_client.locate_query</field>
+            <field name="view_mode">hello_world</field>
+            <field name="view_id" ref="hello_world_view_2"/>
+        </record>
+
+        <!-- <menuitem id="main_hello_world_menu" name="Map View App"/> -->
+
+        <menuitem name="Map View" id="hello_world_submenu" parent="blb_client.maps_menuroot" sequence="4"/> 
+
+        <menuitem name="Open Map View" id="open_view" parent="hello_world_submenu" sequence="1"
+            action="first_hello_world_view"/>
+
+        <menuitem name="Open Map View Evolution" id="open_view_2" parent="hello_world_submenu" sequence="2"
+            action="second_hello_world_view"/>
+
+
+</odoo>

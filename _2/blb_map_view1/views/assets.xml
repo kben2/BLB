@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="hello world assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/blb_map_view/static/src/js/blb_map_view.js"/>
+            <link rel="stylesheet" type="text/scss" href="/blb_map_view/static/src/scss/blb_map_view.scss"/>
+        </xpath>
+    </template>
+</odoo>

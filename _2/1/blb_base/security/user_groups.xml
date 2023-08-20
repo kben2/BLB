@@ -1,0 +1,318 @@
+<odoo>
+    <data noupdate="1">
+
+    <record model="ir.module.category" id="module_category_blb">
+      <field name="name">BLB - User Roles</field>
+      <field name="description">User groups/roles for BLB modules</field>
+      <field name="sequence">1</field>
+    </record>
+   
+   <!-- Branches  -->
+    <record id="blb_branch" model="res.groups">
+      <field name="name">Branch</field>
+      <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_branch_user" model="res.groups">
+      <field name="name">Branch Officer</field>
+      <field name="implied_ids" eval="[(4, ref('blb_base.blb_branch'))]"/>
+      <field name="category_id" ref="module_category_blb"/>
+    </record>
+	
+   <!-- Client Management/Customer Care -->  
+	 <record id="blb_customercare" model="res.groups">
+      <field name="name">Client Management</field>
+      <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_customercare_user" model="res.groups">
+      <field name="name">Client Management User</field>
+      <field name="implied_ids" eval="[(4, ref('blb_base.blb_customercare'))]"/>
+      <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+	<!-- Legal --> 
+	  <record id="blb_legal" model="res.groups">
+      <field name="name">Legal</field>
+      <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_legal_user" model="res.groups">
+      <field name="name">Legal User</field>
+      <field name="implied_ids" eval="[(4, ref('blb_base.blb_legal'))]"/>
+      <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <!-- Registry -->
+    <record id="blb_registry" model="res.groups">
+      <field name="name">Registry</field>
+      <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_registry_user" model="res.groups">
+      <field name="name">Registry User</field>
+      <field name="implied_ids" eval="[(4, ref('blb_base.blb_registry'))]"/>
+      <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+
+
+    <!-- Survey Unit -->
+    <record id="blb_survey" model="res.groups">
+       <field name="name">Survey</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_survey_surveyor" model="res.groups">
+       <field name="name">Surveyor</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_survey'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+    
+    <record id="blb_research_officer" model="res.groups">
+       <field name="name">Research Officer</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_chief_research" model="res.groups">
+       <field name="name">Chief Research</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_research_officer'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_survey_chief_surveyor" model="res.groups">
+       <field name="name">Chief Surveyor</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_survey')),
+            (4, ref('blb_base.blb_survey_surveyor')),
+            (4, ref('blb_base.blb_chief_research'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <!-- Deed Processing -->
+    <record id="blb_processing" model="res.groups">
+       <field name="name">Deed Processing</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_processing_user" model="res.groups">
+       <field name="name">Deed Processing Officer</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_processing'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_processing_lead" model="res.groups">
+       <field name="name">Deed Processing - Team Lead</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_processing')), (4, ref('blb_base.blb_processing_user')),]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <!-- Planning Unit -->
+    <record id="blb_planning" model="res.groups">
+      <field name="name">Planning</field>
+      <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_planning_officer" model="res.groups">
+      <field name="name">Planning Officer</field>
+      <field name="implied_ids" eval="[(4, ref('blb_base.blb_planning'))]"/>
+      <field name="category_id" ref="module_category_blb"/>
+    </record> 
+
+    <record id="blb_chief_planner" model="res.groups">
+      <field name="name">Chief Planner</field>
+      <field name="implied_ids" eval="[(4, ref('blb_base.blb_planning_officer'))]"/>
+      <field name="category_id" ref="module_category_blb"/>
+    </record> 
+
+    <!-- Valuation Unit -->
+    <record id="blb_valuation" model="res.groups">
+       <field name="name">Valuation</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_valuation_officer" model="res.groups">
+       <field name="name">Valuation Officer</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_valuation'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_chief_valuer" model="res.groups">
+       <field name="name">Cheif Valuer</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_valuation_officer'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <!-- OPM PPS -->
+    <record id="blb_opm_pps" model="res.groups">
+       <field name="name">Operations Manager - PPS</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+    <!-- Head PPS -->
+    <record id="blb_head_pps" model="res.groups">
+       <field name="name">Head - PPSR</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_survey')),
+            (4, ref('blb_base.blb_processing')),
+            (4, ref('blb_base.blb_planning')),
+            (4, ref('blb_base.blb_valuation'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    
+
+
+
+   <!-- Lease -->
+    <record id="blb_lease" model="res.groups">
+       <field name="name">Lease Committee</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_lease_user" model="res.groups">
+       <field name="name">Lease Committee User</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_lease'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+   <!-- Title Processing -->
+    <record id="blb_titleprocessing" model="res.groups">
+       <field name="name">Title Processing</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_titleprocessing_user" model="res.groups">
+       <field name="name">Title Processing User</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_titleprocessing'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+   <!-- Title Issuing -->
+    <record id="blb_titleissuing" model="res.groups">
+       <field name="name">Title Issuing</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+    <record id="blb_titleissue_user" model="res.groups">
+       <field name="name">Title Issuer</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_titleissuing'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+
+
+
+    <!-- OPM HRRM -->
+    <record id="blb_opm_hrrm" model="res.groups">
+       <field name="name">Operations Manager - HRRM</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+    <!-- Head HRRM -->
+    <record id="blb_head_hrrm" model="res.groups">
+       <field name="name">Head - HRRM</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_opm_hrrm'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+
+    <!-- OPM NTB -->
+    <record id="blb_opm_ntb" model="res.groups">
+       <field name="name">Operations Manager - NTB</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+    <!-- Head NTB -->
+    <record id="blb_head_ntb" model="res.groups">
+       <field name="name">Head - NTB</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_opm_ntb'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+
+    <!-- OPM OPBDCA -->
+    <record id="blb_opm_opbdca" model="res.groups">
+       <field name="name">Operations Manager - OPBDCA</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+    <!-- Head OPBDCA -->
+    <record id="blb_head_opbdca" model="res.groups">
+       <field name="name">Head - OPBDCA</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_opm_opbdca'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+
+     <!-- OPM FAPLMIS -->
+    <record id="blb_opm_faplmis" model="res.groups">
+       <field name="name">Operations Manager - FAPLMIS</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+    <!-- Head FAPLMIS -->
+    <record id="blb_head_faplmis" model="res.groups">
+       <field name="name">Head - FAPLMIS</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_opm_faplmis'))]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+
+
+
+	  <!-- CEO Office -->  
+    <record id="blb_secretary_ceo" model="res.groups">
+       <field name="name">Secretary CEO</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record> 
+
+    <record id="blb_pa_ceo" model="res.groups">
+       <field name="name">Personal Assistant - CEO</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record> 
+
+    <record id="blb_ceo" model="res.groups">
+       <field name="name">CEO</field>
+       <field name="implied_ids" eval="[(4, ref('blb_base.blb_secretary_ceo')),(4, ref('blb_base.blb_pa_ceo')),]"/>
+       <field name="category_id" ref="module_category_blb"/>
+    </record> 
+
+	  
+	  <record id="blb_view_user" model="res.groups">
+       <field name="name">Viewer</field>
+       <field name="category_id" ref="module_category_blb"/>
+    </record>
+
+
+    <!-- Administrator -->
+     <record id="blb_administrator" model="res.groups">
+        <field name="name">BLB Administrator</field>
+        <field name="implied_ids" eval="[(4, ref('blb_base.blb_branch')),
+			    (4, ref('blb_base.blb_branch_user')),
+			    (4, ref('blb_base.blb_customercare')),
+          (4, ref('blb_base.blb_customercare_user')),
+          (4, ref('blb_base.blb_legal')),
+          (4, ref('blb_base.blb_legal_user')),
+          (4, ref('blb_base.blb_registry')),
+          (4, ref('blb_base.blb_registry_user')),
+          (4, ref('blb_base.blb_survey')),
+          (4, ref('blb_base.blb_survey_surveyor')),
+          (4, ref('blb_base.blb_research_officer')),
+			    (4, ref('blb_base.blb_chief_research')),
+			    (4, ref('blb_base.blb_survey_chief_surveyor')),
+          (4, ref('blb_base.blb_planning')),
+          (4, ref('blb_base.blb_planning_officer')),
+          (4, ref('blb_base.blb_valuation')),
+          (4, ref('blb_base.blb_valuation_officer')),
+          (4, ref('blb_base.blb_chief_valuer')),
+          (4, ref('blb_base.blb_head_pps')),
+          (4, ref('blb_base.blb_processing')),
+          (4, ref('blb_base.blb_processing_user')),
+          (4, ref('blb_base.blb_processing_user')),
+          (4, ref('blb_base.blb_lease')),
+          (4, ref('blb_base.blb_lease_user')),
+          (4, ref('blb_base.blb_titleprocessing')),
+          (4, ref('blb_base.blb_titleprocessing_user')),
+          (4, ref('blb_base.blb_titleissuing')),
+          (4, ref('blb_base.blb_titleissue_user')),
+          (4, ref('blb_base.blb_ceo')),
+          (4, ref('blb_base.blb_view_user'))]"/>
+        <field name="category_id" ref="module_category_blb"/> 
+      </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_blb_deedprocessing_blb_deedprocessing,blb_deedprocessing.blb_deedprocessing,model_blb_deedprocessing_blb_deedprocessing,base.group_user,1,1,1,1

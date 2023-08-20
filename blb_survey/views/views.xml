@@ -1,0 +1,148 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="blb_survey.blb_survey_list">
+      <field name="name">BLB Survey Unit</field>
+      <field name="model">blb_survey.blb_survey</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='pending_allocation'" decoration-primary="status=='allocated'" 
+          decoration-info="status=='pending_confirmation'" decoration-success="status=='job_done'" decoration-danger="status=='overdue'" decoration-muted="status=='forwarded_planning'">
+          <field name="client_file_no"/>
+          <field name="allocated_surveyor"/>
+          <field name="job_category"/>
+          <field name="urgency_level" decoration-danger="urgency_level=='Urgent'" decoration-info="urgency_level=='Normal'" 
+            widget="badge" optional="show"/>
+          <field name="days_difference"/>
+          <field name="status" decoration-warning="status=='pending_allocation'" decoration-primary="status=='allocated'" 
+          decoration-info="status=='pending_confirmation'" decoration-success="status=='job_done'" decoration-danger="status=='overdue'" decoration-muted="status=='forwarded_planning'" widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Survey Unit - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_survey.blb_survey_form">
+      <field name="name">BLB Survey Unit Form</field>
+      <field name="model">blb_survey.blb_survey</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_to_allocated" string="Allocate to Surveyor" type="object" status="pending_allocation" class="btn-primary" 
+              attrs="{'invisible':[('status','!=','pending_allocation')]}"/>
+            <button name="mark_allocated" string="Mark as Allocated/Add Job Details " type="object" status="overdue" class="btn-warning" 
+              attrs="{'invisible':[('status','!=','overdue')]}"/>
+
+            <!-- <button name="action_job_scheduled" string="Schedule Job" type="object" status="allocated" class="btn-primary"/> -->
+            <button name="pending_confirmation" string="Forward to Chief Surveyor" type="object" status="allocated" class="btn-primary" 
+              attrs="{'invisible':[('status','!=','allocated')]}"/>
+            <button name="back_to_surveyor" string="Back to Allocated Surveyor" type="object" status="pending_confirmation" class="btn-primary"
+              attrs="{'invisible':[('status','!=','pending_confirmation')]}"/>
+            <button name="action_mark_survey_job_done" string="Mark Job Done" type="object" status="allocated,pending_confirmation" 
+                class="btn-primary" attrs="{'invisible':[('status','!=','allocated'),('status','!=','pending_confirmation')]}"/>
+            <button name="forward_toplanning" string="Forwarded To Planning" type="object" status="job_done" class="btn-primary" 
+              attrs="{'invisible':[('status','!=','job_done')]}"/>
+            <field name="status" widget="statusbar" statusbar_visible="pending_allocation,allocated,pending_confirmation,job_done"/>
+          </header>
+          <sheet>
+            <separator string="Survey Unit Form" />
+            <group>
+              <field name="client_file_no" attrs="{'readonly': [('status','!=','pending_allocation')]}"/>
+              <field name="client_phone" attrs="{'required':[('client_file_no','!=',False)], 'readonly': [('status','!=','pending_allocation')]}"/>
+              
+              <field name="allocated_surveyor" attrs="{'readonly': [('status','!=','pending_allocation')]}"/>
+              <field name="date_allocation" attrs="{'readonly': [('status','!=','pending_allocation')]}"/>
+              <field name="job_category" attrs="{'readonly': [('status','!=','pending_allocation')]}"/>
+              <field name="job_requirement_details" attrs="{'readonly': [('status','!=','pending_allocation')]}"/>
+              <field name="urgency_level" attrs="{'readonly': [('status','!=','pending_allocation')]}"/>
+
+              <field name="why_task_pending" attrs="{'invisible':[('status','!=','overdue')], 'required': [('status','=','overdue')], 
+                'readonly': [('status','!=','overdue')]}"/>
+
+              <field name="plot_number" 
+                attrs="{'invisible': ['|','|','|',('job_category','!=','Boundary Opening'),('job_category','!=','Subdivision'),
+                ('job_category','!=','Re-Survey'),('status','=','allocated')],
+                'required': [('job_category','in',['Boundary Opening','Subdivision','Re-Survey']),('status','=','allocated')],
+                'readonly': [('status','!=','allocated')]}"/> 
+              <field name="block_number" 
+                attrs="{'invisible': ['|','|','|',('job_category','!=','Boundary Opening'),('job_category','!=','Subdivision'),
+                ('job_category','!=','Re-Survey'),('status','=','allocated')],
+                'required': [('job_category','in',['Boundary Opening','Subdivision','Re-Survey']),('status','=','allocated')],
+                'readonly': [('status','!=','allocated')]}"/>  
+              <field name="county" 
+                attrs="{'invisible': ['|','|','|',('job_category','!=','Boundary Opening'),('job_category','!=','Subdivision'),
+                ('job_category','!=','Re-Survey'),('status','=','allocated')],
+                'required': [('job_category','in',['Boundary Opening','Subdivision','Re-Survey']),('status','=','allocated')],
+                'readonly': [('status','!=','allocated')]}"/>
+              
+              <field name="boundary_opening_purpose" 
+                attrs="{'invisible': [('job_category','!=','Boundary Opening'),('status','=','allocated')],
+                'required': [('job_category','=','Boundary Opening'),('status','=','allocated')], 'readonly': [('status','!=','allocated')]}"/>
+              <field name="correspondence_details" attrs="{'invisible': [('job_category','!=','Office Correspondence'),('status','=','allocated')],
+                'required': [('job_category','=','Office Correspondence'),('status','=','allocated')], 'readonly': [('status','!=','allocated')]}"/>
+
+              <field name="survey_job_form" attrs="{'invisible':[('status','!=','allocated')], 'readonly': [('status','=','job_done')]}"/>
+              <field name="survey_jobform_name" invisible="1"/>
+              <field name="index_diagram" attrs="{'invisible':[('status','!=','allocated')], 'readonly': [('status','=','job_done')]}"/>
+              <field name="index_diagram_name" invisible="1"/>
+
+              <field name="remarks_comments_wayforward" attrs="{'invisible':['|',('status','!=','allocated'),('status','=','pending_confirmation')], 
+                'readonly': [('status','=','job_done')]}"/>
+              
+              <field name="date_completion" attrs="{'invisible':[('status','!=','allocated')], 'readonly': [('status','=','job_done')]}"/>
+              <field name="submitted_by" attrs="{'invisible':[('status','!=','allocated')]}" />
+            </group>        
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_survey.action_window_blb_survey">
+      <field name="name">BLB Survey Unit</field>
+      <field name="res_model">blb_survey.blb_survey</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_survey.action_window_blb_survey_allocated">
+      <field name="name">Allocated to Me</field>
+      <field name="res_model">blb_survey.blb_survey</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('allocated_surveyor','=', uid)]</field>
+    </record>
+
+
+    <!-- server action to the one above 
+    <record model="ir.actions.server" id="blb_survey.action_server">
+      <field name="name">blb_survey server</field>
+      <field name="model_id" ref="model_blb_survey_blb_survey"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record> -->
+
+
+    <!-- Top menu item -->
+    <menuitem name="Survey Unit" id="blb_survey.menu_root" web_icon="blb_survey,static/description/icon.png" sequence="8" 
+      groups="blb_base.blb_survey"/>
+
+    <!-- menu categories -->
+    <menuitem name="Survey Unit" id="blb_survey.client_files" parent="blb_survey.menu_root" sequence="1"/>
+
+    <!-- actions -->
+    <menuitem name="Client Files" id="blb_survey.client_files_list" parent="blb_survey.client_files" action="blb_survey.action_window_blb_survey" 
+        sequence="1"/>
+    <menuitem name="Allocated to Me" id="blb_survey.client_files_list_allocated" parent="blb_survey.client_files" 
+      action="blb_survey.action_window_blb_survey_allocated" sequence="2"/>
+
+  </data>
+</odoo>

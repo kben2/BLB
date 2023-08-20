@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_locate_query,blb_client.locate_query,model_blb_client_locate_query,,1,0,0,0

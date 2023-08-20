@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="blb_valuation.valuation_calculator_print">
+            <t t-call="web.basic_layout">
+                <t t-set="doc" />  <!-- t-value="doc.with_context({'lang':doc.create_uid.partner_id.lang})"  -->
+                <div class="page">
+                    <div style="align-items-center">
+                        <img src='/blb_valuation/static/src/img/blb_logo.png' width="100%" height="100%"/>
+                    </div> <br/><br/><br/> 
+
+                    <t t-foreach="docs" t-as="doc">
+                        <div class="oe_structure"/>
+                        <br/>                
+                        <div class="row mt32 mb32">                      
+                            <div name="partner_address" class="col-xs-3" style="padding-left:20px;">
+                                <h5 style="color:#1565C0;">
+                                    <div><strong><u> PROVISIONAL PAY ADVISE SLIP </u></strong></div>
+                                </h5> 
+                                <table style="border:0px !important;">
+                                    <tr>                                        
+                                        <td>
+                                            <span t-if="doc.client_no">
+                                            <strong>To:</strong>
+                                            <span t-field="doc.client_no.client_name"/></span>                                             
+                                        </td>
+                                        <![CDATA[&nbsp;]]> <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <![CDATA[&nbsp;]]>
+                                        <![CDATA[&nbsp;]]> <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <![CDATA[&nbsp;]]>
+                                        <![CDATA[&nbsp;]]> <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <![CDATA[&nbsp;]]>
+                                        <![CDATA[&nbsp;]]> <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <![CDATA[&nbsp;]]>
+                                        <td>
+                                             <span t-if="doc.date_assessment">
+                                                <strong>Date of Assessment:</strong> <![CDATA[&nbsp;]]> 
+                                                <span t-field="doc.date_assessment"/></span> 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span t-if="doc.client_no">
+                                                <strong>File No.:</strong> <![CDATA[&nbsp;]]> 
+                                                <span t-field="doc.client_no.file_no"/>
+                                            </span> 
+                                        </td>
+                                    </tr>
+                                </table>                               
+                            </div>                         
+                        </div>
+                        <br/> 
+
+                        <div class="row mt32 mb32">                      
+                            <div name="partner_address" class="col-xs-3" style="padding-left:20px;">
+                                <div><strong><u> DETAILS OF THE LAND </u></strong></div>
+                                <span t-if="doc.block_no">
+                                    <strong>Block:</strong> <![CDATA[&nbsp;]]> 
+                                    <span t-field="doc.block_no"/></span> <br/>
+                                <span t-if="doc.plot_no">
+                                    <strong>Plot:</strong> <![CDATA[&nbsp;]]> 
+                                    <span t-field="doc.plot_no"/>
+                                </span> <br/> 
+                                <span t-if="doc.area_estimate_hectares">
+                                    <strong>Area :</strong> <![CDATA[&nbsp;]]> 
+                                    <span t-field="doc.area_estimate_hectares"/>
+                                </span> <br/> 
+                                <span t-if="doc.valuation_id">
+                                    <strong>District:</strong> 
+                                    <span t-field="doc.valuation_id.district_id.name"/> <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> 
+
+                                    <strong>Parish:</strong> 
+                                    <span t-field="doc.valuation_id.parish_id.name"/> <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> 
+
+                                    <strong>Village:</strong>  
+                                    <span t-field="doc.valuation_id.village_id.name"/> <![CDATA[&nbsp;]]>
+                                </span> <br/> 
+                            </div>                         
+                        </div> <br/>
+
+                        <div name="partner_address" class="col-xs-3" style="padding-left:10px;">
+                            <span t-if="doc.lease_term == '49' or doc.lease_term == '99'">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr style="background-color:#F9F9FB !important;">
+                                            <th colspan="2"> <div style="color:#1565C0;"> Basis of Charge (<span t-field="doc.lease_term"/>) </div> </th>
+                                        </tr>
+                                    </thead> 
+                                    <tbody class="tbody">
+                                        <tr style="border-top:1px blue !important;">
+                                            <td> <b><span>Premium:</span></b> </td>
+                                            <td class="text-left"> <span t-field="doc.premium" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <b><span>Ground Rent (per annum):</span></b> </td>
+                                            <td class="text-left"> <span t-field="doc.ground_rent" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <b><span>Title Charges:</span></b> </td>
+                                            <td class="text-left"><span t-field="doc.title_charges" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <b><span>LE Card:</span></b> </td>
+                                            <td class="text-left"><span t-field="doc.le_card" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <b><span>Legal Feeds:</span></b> </td>
+                                            <td class="text-left"> <span t-field="doc.legal_fees" t-options='{"widget": "monetary", "display_currency": doc.currency_id}' /> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <b><span>Valuation Fees:</span></b> </td>
+                                            <td class="text-left"><span t-field="doc.valuation_fees" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}' /> </td>
+                                        </tr>
+
+                                        <tr style="border-top:1px solid blue !important; color:#1565C0">
+                                            <td>
+                                                <b><span>TOTAL PAYMENT IN UG SHILLINGS:</span></b>
+                                            </td>
+                                            <td class="text-left">
+                                                <b><span t-field="doc.total_valuation" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></b>
+                                            </td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+                            </span> 
+
+                            <span t-if="doc.lease_term == 'Both'">                               
+
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr style="background-color:#F9F9FB !important;">
+                                            <th class="text-left"> <div style="color:#1565C0;"><strong> BASIS OF CHARGE </strong></div> </th>
+                                            <th class="text-left"><strong> <b>49 Year Lease</b> </strong></th>
+                                            <th class="text-left"><strong> <b>99 Year Lease</b>  </strong></th>
+                                        </tr>
+                                    </thead> 
+                                    <tbody class="tbody">
+                                        <tr style="border-top:1px blue !important;">
+                                            <td> <b><span>Premium:</span></b> </td>
+                                            <td class="text-left"> <span t-field="doc.premium" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> 
+                                            </td>
+                                            <td class="text-left"> <span t-field="doc.premium_2" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <b><span>Ground Rent (per annum):</span></b> </td>
+                                            <td class="text-left"> <span t-field="doc.ground_rent" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> </td>
+                                            <td class="text-left"> <span t-field="doc.ground_rent" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <b><span>Title Charges:</span></b> </td>
+                                            <td class="text-left"><span t-field="doc.title_charges" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> </td>
+                                            <td class="text-left"><span t-field="doc.title_charges_2" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <b><span>LE Card:</span></b> </td>
+                                            <td class="text-left"><span t-field="doc.le_card" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> </td>
+                                            <td class="text-left"><span t-field="doc.le_card" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <b><span>Legal Fees:</span></b> </td>
+                                            <td class="text-left"> <span t-field="doc.legal_fees" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}' /> </td>
+                                            <td class="text-left"> <span t-field="doc.legal_fees_2" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}' /> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <b><span>Valuation Fees:</span></b> </td>
+                                            <td class="text-left"><span t-field="doc.valuation_fees" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}' /> </td>
+                                            <td class="text-left"><span t-field="doc.valuation_fees" 
+                                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}' /> </td>
+                                        </tr>
+
+                                        <tr style="border-top:1px solid blue !important; color:#1565C0">
+                                            <td>
+                                                <b><span>TOTAL PAYMENT IN UG SHILLINGS:</span></b>
+                                            </td>
+                                            <td class="text-left">
+                                                <b><span t-field="doc.total_valuation" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></b>
+                                            </td>
+                                            <td class="text-left">
+                                                <b><span t-field="doc.total_valuation_2" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></b>
+                                            </td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+                            </span> 
+
+                            <p> Payments shall be made in Stanbic Bank on Buganda Land Board. <span style="color:#FF3333;"><b> A/C: 9030005607948 Forest Mall Branch. </b>   </span> </p>
+                            <p> <b> This pay advice slip is valid for six months. </b> </p>
+                            <br/><br/>
+
+                            <table style="border:0px">
+                                <tr>
+                                    <td>
+                                        <span> ------------------------------------ </span>
+                                        <p> <b> <span t-field="doc.create_uid.name"/> </b> </p>
+                                        <p> <b> VALUER - BUGANDA LAND BOARD. </b> </p>
+                                    </td> 
+                                    <td style="width:200px"> <br/> </td>
+                                    <td>
+                                        <span> ------------------------------------ </span>
+                                        <p> <b> <span t-field="doc.head_pps.name"/> </b> </p>
+                                        <p> <b> HEAD OF DEPARTMENT - PPSR. </b> </p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            
+                        </div>
+
+
+                        
+                    </t>
+
+                </div>
+            </t>
+        </template>
+
+
+        <template id="valuationcalculator_print">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="blb_valuation.valuation_calculator_print" t-lang="doc.create_uid.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

@@ -1,0 +1,463 @@
+<odoo>
+  <data>
+    <!-- BLB Valuation - Demand Note explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.demand_notes_list">
+      <field name="name">BLB Valuation - Demand Notes List</field>
+      <field name="model">blb_valuation.demand_note</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='Pending Review'" decoration-primary="status=='Revision Required'" decoration-info="status=='Revision Done'" 
+          decoration-success="status=='Client File Updated'" decoration-muted="status=='Cancelled'">
+          <field name="file_no"/>
+          <field name="demand_note"/>
+          <field name="status" decoration-warning="status=='Pending Review'" decoration-primary="status=='Revision Required'" 
+            decoration-info="status=='Revision Done'" decoration-success="status=='Client File Updated'" decoration-muted="status=='Cancelled'"
+            widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Valuation - Demand Note - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_valuation.demand_note_form">
+      <field name="name">BLB Valuation - Demand Note Form</field>
+      <field name="model">blb_valuation.demand_note</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_to_revision_required" string="Revision Required" type="object" status="review" class="btn-primary"/>
+            <button name="action_to_cancel" string="Revision NOT Required" type="object" status="review" class="btn-secondary"/>
+
+            <button name="action_to_revised" string="Revised" type="object" status="revision_required" class="btn-primary"/>
+            <button name="action_to_update_done" string="Client File Updated" type="object" status="revised" class="btn-primary"/>
+
+            <field name="status" widget="statusbar" statusbar_visible="review,revision_required,revised,update_done,cancel"/>
+          </header>
+          <sheet>
+            <separator string="BLB Valuation - Demand Note Form" />
+            <group>
+              <field name="file_no"/>
+              <field name="demand_note" filename="demand_note_name" />  
+              <field name="demand_note_name" invisible="1"/>
+              <field name="currency_id" invisible="1"/>
+              <field name="revised_ground_rent" attrs="{'invisible':['|',('status','=','review'),('status','=','cancel')], 
+                'required': [('status','=','revision_required')], 'readonly': ['|', ('status','=','revised'), ('status','=','update_done')]}" />
+              <field name="date_effective" attrs="{'invisible':['|',('status','=','review'),('status','=','cancel')], 
+                'required': [('status','=','revision_required')], 'readonly': ['|', ('status','=','revised'), ('status','=','update_done')]}"/>
+              <field name="remarks" attrs="{'invisible':['|',('status','=','review'),('status','=','cancel')], 
+                'readonly': ['|', ('status','=','revised'), ('status','=','update_done')]}"/>
+              <field name="revised_by" attrs="{'invisible':['|',('status','=','review'),('status','=','cancel')], 
+                'readonly': ['|', ('status','=','revised'), ('status','=','update_done')]}" />
+            </group>        
+          </sheet>
+          <!-- <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> -->
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB Valuation - Valuation Assessment explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.valuation_assessments_list">
+      <field name="name">BLB Valuation - Valuation Assessments List</field>
+      <field name="model">blb_valuation.valuation_assessment</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='Pending Valuation'" decoration-primary="status=='Make Assessment'" decoration-info="status=='Compiled Assessment'" 
+          decoration-success="status=='Client File Updated'" decoration-muted="status=='Cancelled'">
+          <field name="file_no"/>
+          <field name="print_item"/>
+          <field name="status" decoration-warning="status=='Pending Valuation'" decoration-primary="status=='Make Assessment'" 
+            decoration-info="status=='Compiled Assessment'" decoration-success="status=='Client File Updated'" decoration-muted="status=='Cancelled'"
+            widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Valuation - Valuation Assessment - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_valuation.valuation_assessment_form">
+      <field name="name">BLB Valuation - Valuation Assessment Form</field>
+      <field name="model">blb_valuation.valuation_assessment</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_to_make_assessment" string="Make Assessment" type="object" status="pending" class="btn-primary"/>
+            <button name="action_to_cancel" string="Nothing Requires Changing" type="object" status="pending" class="btn-secondary"/>
+
+            <button name="action_to_assessment_compiled" string="Assessment Compiled" type="object" status="make_assessment" class="btn-primary"/>
+            <button name="action_to_update_done" string="Client File Updated" type="object" status="assessment_compiled" class="btn-primary"/>
+
+            <field name="status" widget="statusbar" statusbar_visible="pending,make_assessment,assessment_compiled,update_done,cancel"/>
+          </header>
+          <sheet>
+            <separator string="BLB Valuation - Valuation Assessment Form" />
+            <group>
+              <field name="file_no"/>
+              <field name="print_item" filename="print_item_name"/>  
+              <field name="print_item_name" invisible="1"/>              
+
+              <field name="receipt" filename="receipt_name" attrs="{'invisible':['|',('status','=','pending'),('status','=','cancel')], 
+                'required': [('status','=','make_assessment')], 'readonly': ['|',('status','=','assessment_compiled'),('status','=','update_done')]}"/>
+              <field name="receipt_name" invisible="1"/>
+              <field name="lease_committee_form" filename="lease_committee_form_name" attrs="{'invisible':['|',('status','=','pending'),('status','=','cancel')], 
+                'required': [('status','=','make_assessment')], 'readonly': ['|',('status','=','assessment_compiled'),('status','=','update_done')]}"/>
+              <field name="lease_committee_form_name" invisible="1"/>
+
+              <field name="revision_details" attrs="{'invisible':['|',('status','=','pending'),('status','=','cancel')], 
+                'required': [('status','=','make_assessment')], 'readonly': ['|',('status','=','assessment_compiled'),('status','=','update_done')]}"/>
+              <field name="assessed_by" attrs="{'invisible':['|',('status','=','pending'),('status','=','cancel')], 
+                'required': [('status','=','make_assessment')], 'readonly': ['|',('status','=','assessment_compiled'),('status','=','update_done')]}" />              
+            </group>        
+          </sheet>
+          <!-- <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> -->
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB Valuation - Valuation Requests explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.valuation_requests_list">
+      <field name="name">BLB Valuation - Valuation Requests List</field>
+      <field name="model">blb_valuation.valuation_requests</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='Pending Valuation'" decoration-info="status=='Assessment Compiled'" decoration-primary="status=='Field Inspection'"  
+          decoration-success="status=='Valuation Done'">
+          <field name="file_no"/>
+          <field name="request_item"/>
+          <field name="status" decoration-warning="status=='Pending Valuation'" decoration-info="status=='Assessment Compiled'" 
+            decoration-primary="status=='Field Inspection'" decoration-success="status=='Valuation Done'" widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Valuation - Valuation Requests - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_valuation.valuation_requests_form">
+      <field name="name">BLB Valuation - Valuation Requests Form</field>
+      <field name="model">blb_valuation.valuation_requests</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_to_assessment_compiled" string="Assessment Compiled" type="object" status="pending" class="btn-primary"/>
+            <button name="action_to_field_inspection" string="Requires Field Inspection" type="object" status="assessment_compiled" class="btn-primary"/>
+            <button name="action_to_valuation_done" string="Valuation Done" type="object" status="assessment_compiled,field_inspection" class="btn-primary"/>
+
+            <field name="status" widget="statusbar" statusbar_visible="pending,assessment_compiled,field_inspection,valuation_done"/>
+          </header>
+          <sheet>
+            <separator string="BLB Valuation - Valuation Requests Form" />
+            <group>
+              <field name="file_no"/>
+              <field name="request_item_name" filename="request_item_name"/>  
+              <field name="request_item_name" invisible="1"/>              
+
+              <field name="assessment" filename="assessment_name" attrs="{'invisible':[('status','=','pending')], 
+                'required': [('status','=','assessment_compiled')], 'readonly': ['|', ('status','=','field_inspection'), ('status','=','valuation_done')]}"/>
+              <field name="assessment_name" invisible="1"/>
+              <field name="other_details" attrs="{'invisible':[('status','=','pending')], 
+                'required': [('status','=','assessment_compiled')], 'readonly': ['|', ('status','=','field_inspection'), ('status','=','valuation_done')]}"/>
+              <field name="assessed_by" attrs="{'invisible':[('status','=','pending')], 
+                'readonly': ['|', ('status','=','field_inspection'), ('status','=','valuation_done')]}" />   
+
+              <field name="requires_field_inspection" invisible="1"/> 
+
+              <field name="valuation_report" filename="valuation_report_name" attrs="{'invisible':[('status','=','pending')], 
+                'required': [('status','=','valuation_done')]}" />
+              <field name="valuation_report_name" invisible="1"/>           
+            </group>        
+          </sheet>
+          <!-- <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> -->
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB Valuation - Ground Rent Revision Lines explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.groundrent_revision_lines_list">
+      <field name="name">BLB Valuation - Ground Rent Revision Lines List</field>
+      <field name="model">blb_valuation.groundrent_revision_lines</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="date_revision"/>
+          <field name="date_next_revision"/>  
+          <field name="ground_rent" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+          <field name="currency_id" invisible="1"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Valuation - Ground Rent Revision Lines - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_valuation.groundrent_revision_lines_form">
+      <field name="name">BLB Valuation - Ground Rent Revision Line Form</field>
+      <field name="model">blb_valuation.groundrent_revision_lines</field>
+      <field name="arch" type="xml">
+        <form>   
+          <sheet>
+            <separator string="BLB Valuation - Ground Rent Revision Line Form" />
+            <group>
+              <field name="date_revision"/>
+              <field name="date_next_revision"/>  
+              <field name="ground_rent" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+              <field name="currency_id" invisible="1"/>
+            </group>        
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB Valuation - Ground Rent Revision explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.groundrent_revision_list">
+      <field name="name">BLB Valuation - Ground Rent Revision List</field>
+      <field name="model">blb_valuation.groundrent_revision</field>
+      <field name="arch" type="xml">
+        <tree decoration-warning="status=='pending_confirmation'" decoration-info="status=='revised'">
+          <field name="client_no"/>
+          <field name="date_lease_start"/>
+          <field name="revision_term"/>
+          <field name="revision_percentage"/>
+          <field name="current_ground_rent" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+          <field name="date_next_revision"/>
+          <field name="currency_id" invisible="1"/>
+          <field name="status" decoration-warning="status=='pending_confirmation'" decoration-info="status=='revised'" widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Valuation - Ground Rent Revision - explicit form view definition --> 
+    <record model="ir.ui.view" id="blb_valuation.groundrent_revision_form">
+      <field name="name">BLB Valuation - Ground Rent Revision Form</field>
+      <field name="model">blb_valuation.groundrent_revision</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <!-- <button name="action_do_revision" string="Revise Ground Rent" type="object" status="closed" class="btn-warning" 
+              attrs="{'invisible':[('status','!=','closed')]}" groups="blb_base.blb_valuation_officer"/> -->
+            <button name="action_to_revised" string="Mark as Revised" type="object" status="pending_confirmation" class="btn-primary" 
+              attrs="{'invisible':[('status','!=','pending_confirmation')]}" groups="blb_base.blb_valuation_officer"/>
+            <button name="action_close" string="Details Entered. Mark as Closed" type="object" status="revised" class="btn-success"
+              attrs="{'invisible':[('status','!=','revised')]}" groups="blb_base.blb_valuation,blb_base.blb_lmis_ict"/>
+
+            <field name="status" widget="statusbar" statusbar_visible="pending_confirmation,revised,closed"/>
+          </header>
+          <sheet>
+            <separator string="BLB Valuation - Ground Rent Revision Form" />
+            <group>
+              <field name="client_no" attrs="{'readonly':[('status','in',['revised','closed'])]}"/>
+              <field name="client_phone" attrs="{'required':[('client_no','!=',False)], 'readonly':[('status','in',['revised','closed'])]}"/>
+              
+              <field name="date_lease_start" attrs="{'readonly':[('status','in',['revised','closed'])]}"/> 
+              <field name="revision_term" attrs="{'readonly':[('status','in',['revised','closed'])]}"/>
+              <field name="revision_percentage" attrs="{'readonly':[('status','in',['revised','closed'])]}"/>
+              <field name="current_ground_rent" widget='monetary' options="{'currency_field': 'currency_id'}" 
+                attrs="{'readonly':[('status','in',['revised','closed'])]}"/>
+              <field name="date_last_revision" attrs="{'readonly':[('status','in',['revised','closed'])]}"/>
+              <field name="date_last_payment" attrs="{'readonly':[('status','in',['revised','closed'])]}"/>
+              <field name="date_next_revision" attrs="{'readonly':[('status','in',['revised','closed'])]}"/>
+              <field name="currency_id" invisible="1"/>            
+            </group>   
+            <notebook colspan="4">
+              <page string="Ground Rent Revision Lines">
+                <field name="revision_line_ids" attrs="{'readonly':[('status','in',['revised','closed'])]}">  
+                  <tree string="Ground Rent Revision Lines">
+                    <field name="date_revision"/>
+                    <button name="" string="" type="" class="fa fa-long-arrow-right" title="To"/>
+                    <field name="date_next_revision"/>
+                    <field name="ground_rent" widget='monetary' options="{'currency_field': 'currency_id'}" />
+                    <field name="currency_id" invisible="1"/>
+                  </tree>                  
+                </field>
+              </page> 
+            </notebook>     
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- BLB Valuation - Valuation Assessment explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_valuation.valuation_calculator_list">
+      <field name="name">BLB Valuation - Valuation Assessment List</field>
+      <field name="model">blb_valuation.valuation_calculator</field>
+      <field name="arch" type="xml">
+        <tree decoration-info="status=='added'">
+          <field name="client_no"/>
+          <field name="location"/>
+          <field name="valuation_id"/>
+          <field name="landuse_valuation_id"/>
+          <field name="total_valuation" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+          <field name="currency_id" invisible="1"/> 
+          <field name="status" decoration-info="status=='added'" widget="badge" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- BLB Valuation - Valuation Assessment - explicit form view definition --> 
+    <record model="ir.ui.view" id="blb_valuation.valuation_calculator_form">
+      <field name="name">BLB Valuation - Valuation Assessment Form</field>
+      <field name="model">blb_valuation.valuation_calculator</field>
+      <field name="arch" type="xml">
+        <form>   
+          <header>
+            <button name="action_done" string="Mark as Done" type="object" status="added" class="btn-primary" 
+              attrs="{'invisible':[('status','!=','added')]}" groups="blb_base.blb_valuation_officer"/>            
+            <field name="status" widget="statusbar" statusbar_visible="added,done"/>
+          </header>
+          <sheet>
+            <separator string="BLB Valuation - Valuation Assessment Form"/>
+            <group>
+              <group>
+                <field name="client_no" attrs="{'readonly':[('status','=','done')]}"/>
+                <field name="location" attrs="{'readonly':[('status','=','done')]}"/> 
+                <field name="block_no" attrs="{'readonly':[('status','=','done')]}"/>
+                <field name="plot_no" attrs="{'readonly':[('status','=','done')]}"/>
+                <field name="area_estimate_hectares" attrs="{'readonly':[('status','=','done')]}"/>
+                <field name="area_estimate_acres" attrs="{'readonly':[('status','=','done')]}"/>
+                <field name="lease_term" attrs="{'readonly':[('status','=','done')]}"/>                                
+              </group>
+              <group> 
+                <field name="valuation_id" attrs="{'readonly':[('status','=','done')]}"/>
+                <field name="landuse_valuation_id" attrs="{'readonly':[('status','=','done')]}"/>
+                <field name="possible_valuation" widget='monetary' options="{'currency_field': 'currency_id'}" attrs="{'readonly':[('status','=','done')]}"/>
+                <field name="lecard" widget='monetary' options="{'currency_field': 'currency_id'}" attrs="{'readonly':[('status','=','done')]}"/>
+                <field name="valuationfees" widget='monetary' options="{'currency_field': 'currency_id'}" attrs="{'readonly':[('status','=','done')]}"/>
+                <field name="capital_value" widget='monetary' options="{'currency_field': 'currency_id'}" invisible="1"/>
+              </group>
+              <group string="49 Year Lease Term" attrs="{'invisible':[('lease_term','=','99')]}">                
+                <field name="premium" widget='monetary' options="{'currency_field': 'currency_id'}"/>                
+                <field name="ground_rent" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="title_charges" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="le_card" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="legal_fees" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="valuation_fees" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="total_valuation" widget='monetary' options="{'currency_field': 'currency_id'}"/>              
+                <field name="currency_id" invisible="1"/>    
+              </group>
+              <group string="99 Year Lease Term" attrs="{'invisible':[('lease_term','=','49')]}">
+                <field name="premium_2" widget='monetary' options="{'currency_field': 'currency_id'}"/>                
+                <field name="ground_rent" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="title_charges_2" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="le_card" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="legal_fees_2" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="valuation_fees" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="total_valuation_2" widget='monetary' options="{'currency_field': 'currency_id'}"/>              
+                <field name="currency_id" invisible="1"/>    
+              </group>         
+            </group>     
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_demand_notes">
+      <field name="name">BLB Valuation - Demand Notes</field>
+      <field name="res_model">blb_valuation.demand_note</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_valuation_assessments">
+      <field name="name">BLB Valuation - Valuation Assessments</field>
+      <field name="res_model">blb_valuation.valuation_assessment</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_valuation_requests">
+      <field name="name">BLB Valuation - Valuation Requests</field>
+      <field name="res_model">blb_valuation.valuation_requests</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views on models --> 
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_groundrent_revision_pending">
+      <field name="name">BLB Valuation - Ground Rent Revision</field>
+      <field name="res_model">blb_valuation.groundrent_revision</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('status','=', 'pending_confirmation')]</field> 
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_groundrent_revision_revised">
+      <field name="name">BLB Valuation - Ground Rent Revision</field>
+      <field name="res_model">blb_valuation.groundrent_revision</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('status','=', 'revised')]</field> 
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_groundrent_revision">
+      <field name="name">BLB Valuation - Ground Rent Revision</field>
+      <field name="res_model">blb_valuation.groundrent_revision</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_valuation.action_window_valuation_calculator">
+      <field name="name">BLB Valuation - Valuation Assessment</field>
+      <field name="res_model">blb_valuation.valuation_calculator</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- server action to the one above -->
+    <!-- <record model="ir.actions.server" id="blb_valuation.action_server">
+      <field name="name">blb_valuation server</field>
+      <field name="model_id" ref="model_blb_valuation_blb_valuation"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record> -->
+
+    <!-- Top menu item -->
+    <menuitem name="Valuation Unit" id="blb_valuation.menu_root" web_icon="blb_valuation,static/description/icon.png" sequence="11" 
+      groups="blb_base.blb_valuation,blb_base.blb_lmis_ict"/>
+
+    <!-- menu categories -->
+    <menuitem name="Revisions" id="blb_valuation.demand_notes_menu" parent="blb_valuation.menu_root" sequence="1"
+      groups="blb_base.blb_valuation,blb_base.blb_lmis_ict"/>    
+    <menuitem name="Assessments" id="blb_valuation.valuation_assessments_menu" parent="blb_valuation.menu_root" sequence="2"/>
+    <menuitem name="Valuation Requests" id="blb_valuation.valuation_requests_menu" parent="blb_valuation.menu_root" sequence="3"
+      groups="blb_base.blb_valuation"/>
+
+    <!-- actions -->
+    <menuitem name="All Ground Rent Revisions" id="blb_valuation.groundrent_revision_list_menu" parent="blb_valuation.demand_notes_menu" 
+      action="blb_valuation.action_window_groundrent_revision" sequence="1" groups="blb_base.blb_valuation"/>
+    <menuitem name="Pending Confirmation" id="blb_valuation.revisions_pending_list_menu" parent="blb_valuation.demand_notes_menu" 
+      action="blb_valuation.action_window_groundrent_revision_pending" sequence="2" groups="blb_base.blb_valuation"/>
+    <menuitem name="Revised" id="blb_valuation.revised_list_menu" parent="blb_valuation.demand_notes_menu" 
+      action="blb_valuation.action_window_groundrent_revision_revised" sequence="3" groups="blb_base.blb_valuation,blb_base.blb_lmis_ict"/>    
+
+    <menuitem name="Demand Notes" id="blb_valuation.demand_notes_list_menu" parent="blb_valuation.demand_notes_menu" 
+      action="blb_valuation.action_window_demand_notes" sequence="4" groups="blb_base.blb_valuation"/>    
+
+
+    <menuitem name="Valuation Assessments" id="blb_valuation.valuation_calculator_list_menu" parent="blb_valuation.valuation_assessments_menu" 
+      action="blb_valuation.action_window_valuation_calculator" sequence="1" groups="blb_base.blb_valuation"/>    
+    <menuitem name="Other Assessments" id="blb_valuation.valuation_assessments_list_menu" parent="blb_valuation.valuation_assessments_menu" 
+      action="blb_valuation.action_window_valuation_assessments" sequence="2" groups="blb_base.blb_valuation"/>
+
+
+    <menuitem name="Valuation Requests" id="blb_valuation.valuation_requests_list_menu" parent="blb_valuation.valuation_requests_menu" 
+      action="blb_valuation.action_window_valuation_requests" sequence="1" groups="blb_base.blb_valuation"/>
+              
+  </data>
+</odoo>

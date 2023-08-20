@@ -1,0 +1,903 @@
+<odoo>
+  <data>
+    <!-- Custom Assets -->
+    <!-- <template id="assets_backend" name="custom bar assets" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+        <script type="text/javascript" src="/client/static/src/js/custom.js"></script>
+      </xpath>
+    </template> --> 
+
+    <!-- Plot Ownership Lines - explicit list view definition **************************************************************** -->
+    <record model="ir.ui.view" id="blb_client.plot_ownership_list">
+      <field name="name">Plot Ownership List</field>
+      <field name="model">blb_client.plot_ownership</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="owner_name"/>
+          <field name="date_birth"/>
+          <field name="gender"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_client.plot_ownership_form">
+      <field name="name">Plot Ownership Form</field>
+      <field name="model">blb_client.plot_ownership</field>
+      <field name="arch" type="xml">
+        <form string="Plot Ownership Form" create="false">
+          <sheet>
+            <separator/>
+            <group>   
+              <field name="file_no" readonly="True" domain="[('id','=',context.get('default_file_no'))]"/> 
+              <field name="owner_name"/>              
+              <field name="date_birth"/>
+              <field name="gender"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Plot Co-ordinates Lines - explicit list view definition -->
+    <record model="ir.ui.view" id="blb_client.plot_coordinates_list">
+      <field name="name">Plot Co-ordinates List</field>
+      <field name="model">blb_client.plot_coordinates</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="coordinate_x"/>
+          <field name="coordinate_y"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_client.plot_coordinates_form">
+      <field name="name">Plot Co-ordinates Form</field>
+      <field name="model">blb_client.plot_coordinates</field>
+      <field name="arch" type="xml">
+        <form string="Plot Co-ordinates Form" create="false">
+          <sheet>
+            <separator/>
+            <group>   
+              <field name="file_no" readonly="True" domain="[('id','=',context.get('default_file_no'))]"/> 
+              <field name="coordinate_x"/>              
+              <field name="coordinate_y"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Old Registry - Clients explicit list view definition ********************************************* -->
+    <record model="ir.ui.view" id="blb_client.tbl_registry_clients_list">
+      <field name="name">Old Registry - Clients List</field>
+      <field name="model">blb_client.blb_db2_tbl_registry</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="file_no"/>
+          <field name="file_name"/>
+          <field name="location"/>
+        </tree>
+      </field>
+    </record>
+
+
+    <!-- Clients explicit list view definition ********************************************************************* -->
+    <record model="ir.ui.view" id="blb_client.new_clients_list">
+      <field name="name">New Clients List</field>
+      <field name="model">blb_client.blb_client</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="temp_file_no"/>
+          <field name="client_name"/>
+          <field name="location"/>
+          <field name="created_by"/>
+          <field name="created_branch"/>
+          <field name="state"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_client.blb_clients_list"> 
+      <field name="name">Clients List</field>
+      <field name="model">blb_client.blb_client</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="file_no"/>
+          <field name="client_name"/>
+          <field name="location"/>
+          <field name="block_no"/>
+          <field name="plot_no"/>
+          <field name ="contact_details"/>
+          <field name="state"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Clients Map - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_client.blb_clients_maplist">
+      <field name="name">Clients Maps List</field>
+      <field name="model">blb_client.blb_client</field>
+      <field name="arch" type="xml">
+        <tree string="Client File - Map" create="false" edit="false">
+          <field name="file_no"/>
+          <field name="client_name"/>
+          <field name="location"/>
+          <field name="created_by"/>
+          <field name="created_branch"/>
+          <button name="view_map" string="Map" type="object" icon="fa-map"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_client.blb_clients_maplist_form">
+      <field name="name">Clients Map Form</field>
+      <field name="model">blb_client.blb_client</field>
+      <field name="arch" type="xml">
+        <form string="Client File - Map" create="false" edit="false"> 
+          <script>
+              $(document).ready(function(){
+                $(".modal-header").hide();
+                $(".modal-footer").hide();
+              });
+          </script>
+          <sheet>
+            <group> 
+              <field name="client_name" readonly="1"/>
+              <field name="file_no" readonly="1"/>
+            </group>
+            <notebook colspan="4">
+              <page string="Client Surveyed Plot">
+                <field name="clientmap_surveyed" class='oe_styling_v8' widget="html"/>
+                <div id="clientmap_div" style="position:relative; left:0; top:0; width:100%; height:500px;">
+                  <iframe id="clientmap_iframe" src="" marginwidth="0" marginheight="0" frameborder="no" 
+                            scrolling="yes" style="height:100%; width:100%; border-width:0px;"></iframe>
+                </div>
+              </page>
+              <!-- <page string="All Surveyed Plots">
+                <field name="all_clientsmap_surveyed" class='oe_styling_v8'/>
+              </page> -->
+            </notebook>
+          </sheet> 
+          <footer>     
+            <!-- Blank Footer to hide the Save and Discard buttons -->
+          </footer>
+          <!-- <center>
+            <field name="client_name" invisible="1"/>
+            <field name="file_no" invisible="1"/>
+            <div id="clientmap_div" style="position:absolute; left:0; top:0; width:100%; height:100%;">
+              <iframe id="clientmap_iframe" src="" marginwidth="0" marginheight="0" frameborder="no" 
+                        scrolling="yes" style="height:100%; width:100%; border-width:0px;"></iframe>
+            </div>
+          </center> --> 
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_client.allclients_map_form">
+      <field name="name">All Clients Map Form</field>
+      <field name="model">blb_client.allclients_map</field>
+      <field name="arch" type="xml">
+        <form string="All Clients - Map" create="false" edit="false"> 
+          <center>
+            <field name="allclients" invisible="1"/>
+            <div id="allclientsmap_div" style="position:absolute; left:0; top:0; width:100%; height:100%;">
+              <iframe id="allclientsmap_iframe" src="" marginwidth="0" marginheight="0" frameborder="no" 
+                        scrolling="yes" style="height:100%; width:100%; border-width:0px;"></iframe>
+            </div>
+          </center>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- Clients - explicit form view definition **************************************************************************** -->
+    <record model="ir.ui.view" id="blb_client.blb_client_form">
+      <field name="name">Clients Form</field>
+      <field name="model">blb_client.blb_client</field>
+      <field name="arch" type="xml">
+        <form>   <!-- string="Client Form" -->
+          <header>
+            <button name="action_check_points" string="Check Plot" type="object" states="fileopen,blbregistry,survey" class="btn-primary"/>
+            <button name="action_to_legal" string="Send to Legal" type="object" states="fileopen" class="btn-primary"/>
+            <button name="action_to_blbregistry" string="Send to BLB Registry" type="object" states="legal" class="btn-primary"/>
+            <button name="action_to_survey" string="Send to Survey" type="object" states="blbregistry,blbregistry_report" 
+              class="btn-primary"/>
+            <button name="action_to_planning" string="Send to Planning" type="object" states="survey,survey_rectify" 
+              class="btn-primary"/>
+
+            <button name="action_back_to_registry" string="Back to BLB Registry" type="object" states="planning" class="btn-warning"/>
+            <button name="action_back_to_survey" string="Back to Survey" type="object" states="planning" class="btn-warning"/>
+
+            <button name="action_to_processing" string="Send to Processing" type="object" states="planning" class="btn-primary"/>
+            <button name="action_to_valuation" string="Send to Valuation" type="object" states="processing" class="btn-primary"/>
+            <button name="action_to_lease" string="Send to Lease Committee" type="object" states="valuation" class="btn-primary"/>
+            <button name="action_to_title" string="Send to Title Processing" type="object" states="lease" class="btn-primary"/>
+            <button name="action_to_issue" string="Send to Title Issuing" type="object" states="title" class="btn-primary"/>
+            <button name="action_to_done" string="Mark as Done" type="object" states="issue" class="btn-primary"/>
+            <button name="action_cancel" states="fileopen,blbregistry" type="object" string="Cancel"/>
+            <field name="state" widget="statusbar" 
+              statusbar_visible="fileopen,legal,blbregistry,survey,planning,processing,valuation,lease,title,issue,done,cancel"/>
+          </header>
+          <sheet>
+            <!-- <separator string="Client Form" /> -->
+            <div class="oe_title">
+              <h1>
+                <field name="name" readonly="1"/>
+              </h1>
+            </div>
+            <group name="group_1"  string="File Opening Details">
+              <group>              
+                <field name="temp_file_no"/>
+                <field name="client_name" attrs="{'readonly':[('state','!=','fileopen')]}"/>
+                <field name="old_registryfile_id" attrs="{'invisible':[('old_registryfile_id','=',False)]}"/>
+                <field name ="contact_details"/>
+                <!--<field name="area_estimate_units"/>
+                <field name="area_estimate"/> attrs="{'readonly':[('state', '=', 'done')]}" -->
+                <field name="area_estimate_hectares"/>
+                <field name="area_estimate_acres"/>
+                <field name ="plot_geojson"/>
+				        <!-- <field name ="centroid_eastings"/>
+                <field name ="centroid_northings"/> -->
+                <field name="check_wetland" attrs="{'invisible':[('check_surveyed','=',False)]}" style="color:Red;" />
+                <field name="check_surveyed" attrs="{'invisible':[('check_surveyed','=',False)]}" style="color:Red;"/>
+                <field name="check_blbland" attrs="{'invisible':[('check_blbland','=',False)]}" style="color:Red;"/>
+              </group>
+              <group>              
+                <field name="coordinates_system" attrs="{'readonly':[('state','!=','fileopen')]}"/>
+                <field name="location_x" attrs="{'readonly':[('state','!=','fileopen')]}"/>
+                <field name="location_y" attrs="{'readonly':[('state','!=','fileopen')]}"/>
+                <field name="location" attrs="{'readonly':[('state','!=','fileopen')]}"/>
+                <field name="created_by"/>
+                <field name="created_branch"/>
+              </group>
+            </group>
+
+            <notebook colspan="4" attrs="{'invisible':[('state','=','fileopen')]}">
+              <page string="Legal">
+                <separator string=""/>
+                <group string="Legal Details" attrs="{'invisible':[('state','not in',['legal','blbregistry','survey','planning','processing','valuation','lease','title','issue','done'])]}"> 
+                    <field name="ownership_type" attrs="{'readonly':[('state','!=','legal')]}"/>
+                    <field name="legal_ownershippurchase" widget="many2many_tags" options="{'no_create_edit': False}" attrs="{'invisible':[('ownership_type','!=','Ownership - Purchase')], 'required': [('ownership_type','=','Ownership - Purchase')]}"/>
+                    <field name="legal_ownershipinheritance" widget="many2many_tags" options="{'no_create_edit': False}" attrs="{'invisible':[('ownership_type','!=','Ownership - Inheritance')], 'required': [('ownership_type','=','Ownership - Inheritance')]}"/>
+                    <field name="legal_ownershipdonation" widget="many2many_tags" options="{'no_create_edit': False}" attrs="{'invisible':[('ownership_type','!=','Ownership - Donation')], 'required': [('ownership_type','=','Ownership - Donation')]}"/>
+                    <field name="legal_companies" widget="many2many_tags" options="{'no_create_edit': False}" attrs="{'invisible':[('ownership_type','!=','Companies')], 'required': [('ownership_type','=','Companies')]}"/>
+                    <field name="legal_ngos" widget="many2many_tags" options="{'no_create_edit': False}" attrs="{'invisible':[('ownership_type','!=','Non-Goverment Organisations')], 'required': [('ownership_type','=','Non-Goverment Organisations')]}"/>
+                    <field name="legal_trusts" widget="many2many_tags" options="{'no_create_edit': False}" attrs="{'invisible':[('ownership_type','!=','Trusts')], 'required': [('ownership_type','=','Trusts')]}"/>
+                    <field name="legal_remarks" attrs="{'readonly':[('state','!=','legal')]}"/>
+                </group>
+              </page>
+
+              <page string="Registry and Survey">
+                <separator string=""/>
+                <group>
+                  <group string="BLB Registry Details" attrs="{'invisible':[('state','not in',['blbregistry','survey','planning','processing','valuation','lease','title','issue','done'])]}"> 
+                    <field name="clearing_by"/>
+                    <field name="receipt_survey" attrs="{'readonly':[('state','!=','blbregistry')]}"/>
+                    <field name="file_no" attrs="{'readonly':[('state','!=','blbregistry')]}"/>
+                  </group>
+                  <group string="Survey Details" attrs="{'invisible':[('state','not in',['survey','planning','processing','valuation','lease','title','issue','done'])]}"> 
+                      <field name="type_survey" attrs="{'readonly':[('state','!=','survey')]}"/>
+                      <field name="date_assigned_survey" attrs="{'readonly':[('state','!=','survey')]}"/>
+                      <field name="user_assigned_survey" attrs="{'readonly':[('state','!=','survey')]}"/>
+                      <field name="surveyed_by" attrs="{'readonly':[('state','!=','survey')]}"/>
+                      <field name="date_survey" attrs="{'readonly':[('state','!=','survey')]}"/>
+					  <field name="date_worked_on" attrs="{'readonly':[('state','!=','survey')]}"/>
+                  </group>
+                </group>
+              </page>
+
+              <page string="Planning and Processing">
+                <separator string=""/>
+                <group>
+                  <group string="Planning Details" attrs="{'invisible':[('state','not in',['planning','processing','valuation','lease','title','issue','done'])]}"> 
+                      <field name="planned_by" attrs="{'readonly':[('state','!=','planning')]}"/>
+                      <field name="date_planning" attrs="{'readonly':[('state','!=','planning')]}"/>
+                      <field name="remarks_planning" attrs="{'readonly':[('state','!=','planning')]}"/>
+                  </group>
+                  <group string="Processing Details"  attrs="{'invisible':[('state','not in',['processing','valuation','lease','title','issue','done'])]}"> 
+                      <field name="processing_by" attrs="{'readonly':[('state','!=','processing')]}"/>
+                      <field name="date_start_processing" attrs="{'readonly':[('state','!=','processing')]}"/>
+                      <field name="date_end_processing" attrs="{'readonly':[('state','!=','processing')]}"/>
+                      <field name="block_no" attrs="{'readonly':[('state','!=','processing')]}"/>
+                      <field name="plot_no" attrs="{'readonly':[('state','!=','processing')]}"/>
+                  </group>
+                </group>
+              </page>
+
+              <page string="Valuation and Lease Committee">
+                <separator string=""/>
+                <group>
+                  <group string="Valuation Details"  attrs="{'invisible':[('state','not in',['valuation','lease','title','issue','done'])]}"> 
+                      <field name="date_valuation" attrs="{'readonly':[('state','!=','valuation')]}"/>
+                      <field name="valuer" attrs="{'readonly':[('state','!=','valuation')]}"/>
+                      <field name="receipt_valuation" attrs="{'readonly':[('state','!=','valuation')]}"/>
+                  </group>
+                  <group string="Lease Committee Details"  attrs="{'invisible':[('state','not in',['lease','title','issue','done'])]}">
+						<field name="date_lease_committee"/>
+                      <field name="duration_lease" attrs="{'readonly':[('state','!=','lease')]}"/>
+                  </group>
+                </group>
+              </page>
+
+              <page string="Title Processing and Issuing">
+                <separator string=""/>
+                <group>
+                  <group string="Title Processing Details"  attrs="{'invisible':[('state','not in',['title','issue','done'])]}"> 
+                      <field name="date_start_title_processing" attrs="{'readonly':[('state','!=','title')]}"/>
+                      <field name="date_end_title_processing" attrs="{'readonly':[('state','!=','title')]}"/>
+                  </group> 
+                  <group string="Title Issuing Details"  attrs="{'invisible':[('state','not in',['issue','done'])]}"> 
+                      <field name="date_issued" attrs="{'readonly':[('state','!=','issue')]}"/>
+                      <field name="issued_by" attrs="{'readonly':[('state','!=','issue')]}"/>
+                  </group>
+                </group>
+              </page>
+
+              <page string="Owners">
+                <separator/>
+                <field name="plot_ownership_lines" context="{'default_file_no':active_id}">
+                  <tree string="Plot Owners" >
+                    <field name="owner_name"/>
+                    <field name="date_birth"/>
+                    <field name="gender"/>
+                  </tree>                  
+                </field>
+              </page>
+
+              <page string="Plot Co-ordinates">
+                <separator/>
+                <field name="plot_coordinates" context="{'default_file_no':active_id}">
+                  <tree string="Plot Co-ordinates">
+                    <field name="coordinate_x"/>
+                    <field name="coordinate_y"/>
+                  </tree>                  
+                </field>
+              </page>
+
+            <page string="Plot Co-ordinates Map">
+                <div id="plot_coordinates_div" style="position:relative; left:0; top:0; width:100%; height:500px;">
+                  <iframe id="plotcoordinates_iframe" src="" marginwidth="0" marginheight="0" frameborder="no" 
+                            scrolling="yes" style="height:100%; width:100%; border-width:0px;"></iframe>
+                </div>
+              </page>
+
+            </notebook>           
+          </sheet>
+          <!-- <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div> -->
+        </form>
+      </field>
+    </record>
+
+    <!-- Extended Client Form *******************************************************************************************  --> 
+    <record id="blb_client.blb_client_form_branch_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Branch</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[(6, 0, [ref('blb_base.blb_registry_user')])]"/>
+        <field name="arch" type="xml">
+            <field name="client_name" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <!-- <field name="area_estimate" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field> -->
+            <field name="area_estimate_hectares" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="area_estimate_acres" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="location" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+<!--             <field name="block" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field> -->
+            <field name="coordinates_system" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="location_x" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="location_y" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <!-- <field name="remarks" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field> -->
+        </field>
+    </record>
+
+<!--     <record id="blb_client.blb_client_form_branch_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Branch</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[ (6, 0, [ref('blb_base.blb_legal_user'), ref('blb_base.blb_registry_user'), ref('blb_base.blb_survey_surveyor'), 
+          ref('blb_base.blb_planning_officer'), ref('blb_base.blb_processing_user'), ref('blb_base.blb_valuation_officer'), ref('blb_base.blb_lease_user'), 
+          ref('blb_base.blb_titleprocessing_user'), ref('blb_base.blb_titleissue_user')]) ]"/>
+        <field name="arch" type="xml">
+            <field name="client_name" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="area_estimate" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="area_estimate_hectares" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="area_estimate_acres" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="location" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="block" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="coordinates_system" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="location_x" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="location_y" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="remarks" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+        </field>
+    </record> -->
+
+    <record id="blb_client.blb_client_form_legal_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Legal</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[ (6, 0, [ref('blb_base.blb_branch_user'), ref('blb_base.blb_registry_user'), ref('blb_base.blb_survey_surveyor'), 
+          ref('blb_base.blb_planning_officer'), ref('blb_base.blb_processing_user'), ref('blb_base.blb_valuation_officer'), ref('blb_base.blb_lease_user'),
+          ref('blb_base.blb_titleprocessing_user'), ref('blb_base.blb_titleissue_user')]) ]"/>
+        <field name="arch" type="xml">
+			
+            <field name="ownership_type" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="legal_ownershippurchase" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="legal_ownershipinheritance" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="legal_ownershipdonation" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="legal_companies" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="legal_ngos" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="legal_trusts" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="legal_remarks" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="blb_client.blb_client_form_registry_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Registry</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[ (6, 0, [ref('blb_base.blb_branch_user'), ref('blb_base.blb_legal_user'), ref('blb_base.blb_survey_surveyor'), 
+          ref('blb_base.blb_planning_officer'), ref('blb_base.blb_processing_user'), ref('blb_base.blb_valuation_officer'), ref('blb_base.blb_lease_user'), 
+          ref('blb_base.blb_titleprocessing_user'), ref('blb_base.blb_titleissue_user')]) ]"/>
+        <field name="arch" type="xml">
+            <field name="receipt_survey" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="blb_client.blb_client_form_survey_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Survey</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[ (6, 0, [ref('blb_base.blb_branch_user'), ref('blb_base.blb_legal_user'), ref('blb_base.blb_registry_user'), 
+          ref('blb_base.blb_planning_officer'), ref('blb_base.blb_processing_user'), ref('blb_base.blb_valuation_officer'), ref('blb_base.blb_lease_user'),
+          ref('blb_base.blb_titleprocessing_user'), ref('blb_base.blb_titleissue_user')]) ]"/>
+        <field name="arch" type="xml">
+            <field name="type_survey" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="date_assigned_survey" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="user_assigned_survey" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="date_survey" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+			<field name="surveyed_by" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="blb_client.blb_client_form_planning_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Planning</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[ (6, 0, [ref('blb_base.blb_branch_user'), ref('blb_base.blb_legal_user'), ref('blb_base.blb_registry_user'),
+          ref('blb_base.blb_survey_surveyor'), ref('blb_base.blb_processing_user'), ref('blb_base.blb_valuation_officer'), ref('blb_base.blb_lease_user'), 
+          ref('blb_base.blb_titleprocessing_user'), ref('blb_base.blb_titleissue_user')]) ]"/>
+        <field name="arch" type="xml">
+            <field name="date_planning" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="remarks_planning" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="blb_client.blb_client_form_processing_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Processing</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[ (6, 0, [ref('blb_base.blb_branch_user'), ref('blb_base.blb_legal_user'), ref('blb_base.blb_registry_user'), 
+          ref('blb_base.blb_survey_surveyor'), ref('blb_base.blb_planning_officer'), ref('blb_base.blb_valuation_officer'), ref('blb_base.blb_lease_user'),
+          ref('blb_base.blb_titleprocessing_user'), ref('blb_base.blb_titleissue_user')]) ]"/>
+        <field name="arch" type="xml">
+            <field name="processing_by" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="date_start_processing" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="date_end_processing" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="block_no" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="plot_no" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="blb_client.blb_client_form_valuation_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Valuation</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[ (6, 0, [ref('blb_base.blb_branch_user'), ref('blb_base.blb_legal_user'), ref('blb_base.blb_registry_user'), 
+          ref('blb_base.blb_survey_surveyor'), ref('blb_base.blb_planning_officer'), ref('blb_base.blb_processing_user'), ref('blb_base.blb_lease_user'), 
+          ref('blb_base.blb_titleprocessing_user'), ref('blb_base.blb_titleissue_user')]) ]"/>
+        <field name="arch" type="xml">
+            <field name="date_valuation" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="receipt_valuation" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="blb_client.blb_client_form_leasing_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Leasing</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[ (6, 0, [ref('blb_base.blb_branch_user'), ref('blb_base.blb_legal_user'), ref('blb_base.blb_registry_user'),
+          ref('blb_base.blb_survey_surveyor'), ref('blb_base.blb_planning_officer'), ref('blb_base.blb_processing_user'), ref('blb_base.blb_valuation_officer'), 
+          ref('blb_base.blb_titleprocessing_user'), ref('blb_base.blb_titleissue_user')]) ]"/>
+        <field name="arch" type="xml">
+            <field name="date_lease_committee" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="duration_lease" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="blb_client.blb_client_form_titleprocessing_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Title Processing</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[ (6, 0, [ref('blb_base.blb_branch_user'), ref('blb_base.blb_legal_user'), ref('blb_base.blb_registry_user'), 
+          ref('blb_base.blb_survey_surveyor'), ref('blb_base.blb_planning_officer'), ref('blb_base.blb_processing_user'), ref('blb_base.blb_valuation_officer'), 
+          ref('blb_base.blb_lease_user'), ref('blb_base.blb_titleissue_user')]) ]"/>
+        <field name="arch" type="xml">
+            <field name="date_start_title_processing" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+            <field name="date_end_title_processing" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="blb_client.blb_client_form_titleisuing_extended" model="ir.ui.view">
+        <field name="name">Clients Form Extended - Title Issuing</field>
+        <field name="model">blb_client.blb_client</field>
+        <field name="inherit_id" ref="blb_client.blb_client_form" />
+        <field name="groups_id" eval="[ (6, 0, [ref('blb_base.blb_branch_user'), ref('blb_base.blb_legal_user'), ref('blb_base.blb_registry_user'),
+          ref('blb_base.blb_survey_surveyor'), ref('blb_base.blb_planning_officer'), ref('blb_base.blb_processing_user'), ref('blb_base.blb_valuation_officer'), 
+          ref('blb_base.blb_lease_user'), ref('blb_base.blb_titleprocessing_user')]) ]"/>
+        <field name="arch" type="xml">
+            <field name="date_issued" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+        </field>
+    </record>
+
+
+    <!-- Plots surveyed - explicit list view definition *******************************************************************  -->
+    <record model="ir.ui.view" id="blb_client.plots_list">
+      <field name="name">Plots Surveyed Data List</field>
+      <field name="model">blb_client.blb_client_plots</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="file_number"/>
+          <field name="date_surveyed"/>
+          <field name="surveyor"/>
+          <field name="geom"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Plots surveyed - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_client.plot_form">
+      <field name="name">Plot Surveyed Form</field>
+      <field name="model">blb_client.blb_client_plots</field>
+      <field name="arch" type="xml">
+        <form string="Plot Form" create="false" edit="false">
+          <sheet>
+            <separator string="Plot Surveyed Form" />
+            <group>              
+              <field name="file_number"/>
+              <field name="date_surveyed"/>
+              <field name="surveyor"/>
+              <field name="geom"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record> 
+
+
+    <!-- New Clients actions opening views on models *********************************************************************  -->
+    <record id="blb_client.new_clients_action_window" model="ir.actions.act_window">
+      <field name="name">New Clients</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <!-- <field name="view_type">form</field> -->
+      <field name="view_id" ref="blb_client.new_clients_list"/>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Clients actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_client.action_window">
+      <field name="name">Clients</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_fileopening">
+      <field name="name">Clients - File Opening</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'fileopen')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_legal">
+      <field name="name">Clients - Legal office</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'legal')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_blbregistry">
+      <field name="name">Clients - BLB Registry</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'blbregistry')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_blbregistry_report">
+      <field name="name">Clients - BLB Registry Report Pending</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'blbregistry_report')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_survey">
+      <field name="name">Clients - Survey</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'survey')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_survey_rectify">
+      <field name="name">Clients - Survey Rectification</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'survey_rectify')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_planning">
+      <field name="name">Clients - Planning</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'planning')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_processing">
+      <field name="name">Clients - Deed Plan Processing</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'processing')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_valuation">
+      <field name="name">Clients - Valuation</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'valuation')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_lease">
+      <field name="name">Clients - Lease Committee</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'lease')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_title">
+      <field name="name">Clients - Title Processing</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'title')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_issue">
+      <field name="name">Clients - Title Issued</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'issue')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_done">
+      <field name="name">Clients - Completed</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'done')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="blb_client.action_window_cancelled">
+      <field name="name">Clients - Cancelled</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('state','=', 'cancel')]</field>
+    </record>
+
+
+    <!-- Map actions opening views on models -->  
+    <record model="ir.actions.act_window" id="blb_client.action_window_mapclients">
+      <field name="name">Clients - Maps</field>
+      <field name="res_model">blb_client.blb_client</field>
+      <!-- <field name="view_type">form</field> -->
+      <field name="view_mode">tree</field>
+      <field name="domain">[('state','=', 'survey')]</field>
+      <field name="view_id" ref="blb_client.blb_clients_maplist"/>
+      <field name="target">current</field>
+    </record>
+
+    <!-- Plots actions opening views on models -->
+    <record model="ir.actions.act_window" id="blb_client.action_window_plots">
+      <field name="name">Plots Surveyed Data List</field>
+      <field name="res_model">blb_client.blb_client_plots</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Select Budget Summary action -->
+    <record id="action_wizard_allclientsmapform" model="ir.actions.act_window">
+        <field name="name">All Clients Map</field>
+        <field name="res_model">blb_client.allclients_map</field>
+        <!-- <field name="view_type">form</field> -->
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="blb_client.allclients_map_form"/>
+        <field name="target">current</field>
+    </record>   
+
+    <!-- Plot Coordinates actions opening views on models -->    
+    <record model="ir.actions.act_window" id="blb_client.action_window_plotcoordinates">
+      <field name="name">Plot Coordinates</field>
+      <field name="res_model">blb_client.plot_coordinates</field>
+      <field name="view_mode">tree,form</field>
+    </record> 
+
+    <!-- Old Registry Clients actions opening views on models -->    
+    <record model="ir.actions.act_window" id="blb_client.action_window_tbl_registry">
+      <field name="name">Old Registry Clients</field>
+      <field name="res_model">blb_client.blb_db2_tbl_registry</field>
+      <field name="view_mode">tree,form</field>
+    </record> 
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="blb_client.action_server">
+      <field name="name">client server</field>
+      <field name="model_id" ref="model_client_client"/>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <menuitem name="Clients Database" id="blb_client.menu_root" web_icon="blb_client,static/description/icon.png" sequence="3" 
+      groups="blb_base.blb_branch,blb_base.blb_customercare,blb_base.blb_legal,blb_base.blb_registry,blb_base.blb_survey,blb_base.blb_planning,blb_base.blb_valuation,blb_base.blb_processing,blb_base.blb_lease,blb_base.blb_titleprocessing,blb_base.blb_titleissuing,blb_base.blb_ceo"/>
+    <menuitem name="Client - Maps" id="blb_client.maps_menuroot" web_icon="blb_client,static/description/maplayers-icon.png" sequence="4" 
+      groups="blb_base.blb_survey"/>
+
+    <!-- menu categories -->
+    <menuitem name="Clients" id="blb_client.menu_1" parent="blb_client.menu_root" sequence="1"/>
+    <menuitem name="Old Registry Clients" id="blb_client.menu_2" parent="blb_client.menu_root" sequence="2"/>
+    <menuitem name="Plots Surveyed" id="blb_client.menu_3" parent="blb_client.maps_menuroot" sequence="1"/>
+    <menuitem name="Data Import" id="blb_client.menu_4" parent="blb_client.maps_menuroot" sequence="2"/>
+
+    <!-- actions -->
+    <menuitem name="All Clients" id="blb_client.all_clients" parent="blb_client.menu_1" action="blb_client.action_window" sequence="1"/>
+    <menuitem name="File Opening" id="blb_client.blb_clients_fileopening" parent="blb_client.menu_1" action="blb_client.action_window_fileopening" 
+      sequence="2"/>
+    <menuitem name="Legal department" id="blb_client.blb_clients_legal" parent="blb_client.menu_1" action="blb_client.action_window_legal" 
+      sequence="3"/>  
+    <menuitem name="BLB Registry" id="blb_client.blb_clients_blbregistry" parent="blb_client.menu_1" action="blb_client.action_window_blbregistry" 
+      sequence="4"/>
+    <menuitem name="BLB Registry - Report Pending" id="blb_client.blb_clients_blbregistry_report" parent="blb_client.menu_1" 
+      action="blb_client.action_window_blbregistry_report" sequence="5"/>
+    <menuitem name="Survey" id="blb_client.blb_clients_survey" parent="blb_client.menu_1" action="blb_client.action_window_survey" sequence="6"/>
+    <menuitem name="Survey Rectification" id="blb_client.blb_clients_survey_rectify" parent="blb_client.menu_1" 
+      action="blb_client.action_window_survey_rectify" sequence="7"/>
+    <menuitem name="Planning" id="blb_client.blb_clients_planning" parent="blb_client.menu_1" action="blb_client.action_window_planning" 
+      sequence="8"/>
+    <menuitem name="Deed Plan Processing" id="blb_client.blb_clients_processing" parent="blb_client.menu_1" 
+      action="blb_client.action_window_processing" sequence="9"/>
+    <menuitem name="Valuation" id="blb_client.blb_clients_valuation" parent="blb_client.menu_1" action="blb_client.action_window_valuation" 
+      sequence="10"/>
+    <menuitem name="Lease Committee" id="blb_client.blb_clients_lease" parent="blb_client.menu_1" action="blb_client.action_window_lease" 
+      sequence="11"/>
+    <menuitem name="Title Processing" id="blb_client.blb_clients_title" parent="blb_client.menu_1" action="blb_client.action_window_title" 
+      sequence="12"/>
+    <menuitem name="Title Issued" id="blb_client.blb_clients_issue" parent="blb_client.menu_1" action="blb_client.action_window_issue" 
+      sequence="13"/>
+    <menuitem name="Completed" id="blb_client.blb_clients_done" parent="blb_client.menu_1" action="blb_client.action_window_done" sequence="14"/>
+    <menuitem name="Cancelled" id="blb_client.blb_clients_cancelled" parent="blb_client.menu_1" action="blb_client.action_window_cancelled" 
+      sequence="14"/>
+    
+    
+    <menuitem name="Surveyed Plots" id="blb_client.menu_surveyedplots" parent="blb_client.menu_3" 
+      action="blb_client.action_window_mapclients" sequence="1"/>
+    <menuitem name="All Clients Map" id="blb_client.menu_allclientsplots" parent="blb_client.menu_3" 
+      action="blb_client.action_wizard_allclientsmapform" sequence="2"/>
+    <menuitem name="Plots Coordinates" id="blb_client.menu_plotcoordinates" parent="blb_client.menu_4" action="blb_client.action_window_plotcoordinates" 
+      sequence="1"/>
+    <menuitem name="Plots Data" id="blb_client.menu_plotsdata" parent="blb_client.menu_4" action="blb_client.action_window_plots" 
+      sequence="2"/>
+
+
+    <menuitem name="Clients List" id="blb_client.menu_old_clients_list" parent="blb_client.menu_2" action="blb_client.action_window_tbl_registry" 
+      sequence="1"/>
+
+  </data>
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_blb_base_blb_base,blb_base.blb_base,model_blb_base_blb_base,blb_base.blb_administrator,1,1,1,1
+access_blb_base_branches,blb_base.branches,model_blb_base_branches,blb_base.blb_administrator,1,1,1,1
+access_blb_base_blb_department,blb_base.blb_department,model_blb_base_blb_department,blb_base.blb_administrator,1,1,1,1
+access_blb_base_blb_unit,blb_base.blb_unit,model_blb_base_blb_unit,blb_base.blb_administrator,1,1,1,1

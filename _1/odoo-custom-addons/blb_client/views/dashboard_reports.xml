@@ -1,0 +1,161 @@
+<odoo>
+  <data>
+    <!-- Custom Assets -->
+    <!-- <template id="assets_backend" name="custom bar assets" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+        <script type="text/javascript" src="/blb_client/static/src/js/customdashboard.js"></script>
+      </xpath>
+    </template>  -->
+    
+    <!-- Get Data Summary - explicit form view definition --> 
+    <record model="ir.ui.view" id="blb_client.datasummary_wizard_form">
+      <field name="name">Select Input</field>
+      <field name="model">blb_client.data_summary_wizard</field>
+      <field name="arch" type="xml">
+        <form string="Select Input Wizard" create="false" edit="false">
+          <sheet>
+            <separator string="Select Input"/>
+            <!-- <group>              
+              <field name="branch_id"/>
+            </group> -->
+          </sheet>
+          <footer>             
+            <button name="get_dashboard_view" type="object" string="Select Inputs" class="oe_highlight"/> 
+            <button string="Cancel" special="cancel" class="btn-default"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+    <!-- Data Summary - explicit pivot view definition -->
+    <record model="ir.ui.view" id="blb_client.datasummary_pivot">
+         <field name="name">Data Summary</field>
+         <field name="model">blb_client.data_summary</field>
+         <field name="arch" type="xml">
+             <pivot string="Data Summary" disable_linking="True">
+                  <field name="blb_branch" type="row"/>
+                  <field name="file_status" type="col"/>
+                  <field name="files_count" type="measure"/>
+             </pivot>
+         </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_client.datasummary_graph">
+         <field name="name">Data Summary Graph</field>
+         <field name="model">blb_client.data_summary</field>
+         <field name="arch" type="xml">
+             <graph string="Data Summary" type="bar" stacked="True">
+                  <field name="file_status" type="row"/>
+                  <field name="files_count" type="measure"/>
+             </graph>
+         </field>
+    </record>
+
+    <record model="ir.ui.view" id="blb_client.datasummary_pie">
+        <field name="name">Data Summary Pie</field>
+        <field name="model">blb_client.data_summary</field>
+        <field eval="12" name="priority"/>
+        <field name="arch" type="xml">
+            <graph string="Data Summary - Pie Chart" type="pie">
+                <field name="file_status" type="row"/>
+                <field name="files_count" type="measure"/>
+            </graph>
+        </field>
+    </record> 
+
+
+    <!-- Locate Query - explicit form view definition -->
+    <record model="ir.ui.view" id="blb_client.locatequery_form">
+      <field name="name">Locate Query Form</field>
+      <field name="model">blb_client.locate_query</field>
+      <field name="arch" type="xml">
+        <form string="Locate Query Form" create="false" edit="false"> 
+          <header>
+            <button name="compute_location" string="Check Point" type="object" class="btn-primary"/>
+            <!-- <button name="compute_map" string="Show Map" type="object" class="btn-primary"/> -->
+          </header>
+          <sheet>
+            <group> 
+              <group>
+                <field name="coordinate_x"/>
+                <field name="coordinate_y"/>
+              </group>
+              <group>
+                <field name="check_wetland"/>
+                <field name="check_surveyed"/>
+                <field name="check_blbland"/>
+              </group>
+            </group>
+            <notebook colspan="4">
+              <page string="Locate Query Map">
+                <div id="locatequery_div" style="position:relative; left:0; top:0; width:100%; height:500px;">
+                  <iframe id="locatequery_iframe" src="" marginwidth="0" marginheight="0" frameborder="no" 
+                            scrolling="yes" style="height:100%; width:100%; border-width:0px;"></iframe>
+                </div>
+              </page>
+            </notebook>
+          </sheet> 
+          <footer>     
+            <!-- Blank Footer to hide the Save and Discard buttons -->
+          </footer>
+        </form>
+      </field>
+    </record>
+
+   
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.server" id="blb_client.action_window_datasummary" >
+      <field name="name">Data Summary</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_blb_client_data_summary"/>      
+      <field name="state">code</field>      
+      <field name="code">
+        action = env.get('blb_client.data_summary_wizard').get_dashboard_view()
+      </field>
+    </record>
+    
+
+    <!-- Select Budget Summary action -->
+    <record id="action_window_locatequery" model="ir.actions.act_window">
+        <field name="name">Locate Query Form</field>
+        <field name="res_model">blb_client.locate_query</field>
+        <!-- <field name="view_type">form</field> -->
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="blb_client.locatequery_form"/>
+        <!-- <field name="target">inline</field> -->
+    </record>  
+
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="blb_client.action_server">
+      <field name="name">blb_client server</field>
+      <field name="model_id" ref="model_blb_client_blb_client"/>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <menuitem name="Dashboard" id="blb_client.reports_root" web_icon="blb_client,static/description/dashboard-icon.png" sequence="1" 
+      groups="blb_base.blb_administrator"/>
+
+    <!-- menu categories -->
+    <menuitem name="Dashboard" id="blb_client.report_menu_1" parent="blb_client.reports_root" sequence="1"/>
+
+    <!-- actions -->
+    <menuitem name="Dashboard Summary" id="blb_client.dashboard_summary" parent="blb_client.report_menu_1"  
+      action="blb_client.action_window_datasummary" sequence="1"/>
+
+    <menuitem name="Locate Query" id="blb_client.locatequery_menu" parent="blb_client.report_menu_1"  
+      action="blb_client.action_window_locatequery" sequence="2"/>
+    
+
+  </data>
+</odoo>
